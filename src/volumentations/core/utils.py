@@ -1,6 +1,7 @@
+"""Utils used by volumentations."""
 from abc import ABCMeta, abstractmethod
 
-from ..core.six import string_types, add_metaclass
+from ..core.six import add_metaclass, string_types
 
 
 def format_args(args_dict):
@@ -95,7 +96,6 @@ class DataProcessor:
             return data
         for data_name in self.data_fields:
             for field in self.params.label_fields:
-                assert len(data[data_name]) == len(data[field])
                 data_with_added_field = []
                 for d, field_value in zip(data[data_name], data[field]):
                     data_with_added_field.append(list(d) + [field_value])

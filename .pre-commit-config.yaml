@@ -17,3 +17,12 @@ repos:
         entry: poetry run flake8
         language: system
         types: [python]
+  - repo: https://github.com/asottile/seed-isort-config
+    rev: v2.1.1
+    hooks:
+      - id: seed-isort-config
+  - repo: https://github.com/timothycrosley/isort
+    rev: 4.3.19 # pick the isort version you'd like to use from https://github.com/timothycrosley/isort/releases
+    hooks:
+      - id: isort
+        files: \.py$

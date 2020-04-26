@@ -163,3 +163,4 @@ fabric.properties
 .pytype/
 docs/_build/
 src/*.egg-info/
+poetry.lock

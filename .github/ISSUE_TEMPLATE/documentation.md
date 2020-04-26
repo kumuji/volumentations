@@ -1,9 +1,17 @@
 ---
-name: "Documentation"
-about: Report an issue related to https://albumentations.readthedocs.io#
-
+name: Typos and doc fixes
+about: Typos and doc fixes
+title: ""
+labels: typo, documentation
+assignees: ""
 ---
 
 ## 📚 Documentation
 
-<!-- A clear and concise description of what content in https://albumentations.readthedocs.io is an issue. -->
+For typos and doc fixes, please go ahead and:
+
+1. Create an issue.
+2. Fix the typo.
+3. Submit a PR.
+
+Thanks!

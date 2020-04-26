@@ -1,35 +1,18 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 import datetime
-from typing import Dict, Any
-from unittest.mock import MagicMock
-
-import re
 import os
+import re
 import sys
+from typing import Any, Dict
 
 sys.path.insert(0, os.path.abspath("../"))
-
-
-class Mock(MagicMock):
-    @classmethod
-    def __getattr__(cls, name):
-        return MagicMock()
-
-
-MOCK_MODULES = [
-    "pytorch",
-    "torchvision.transforms",
-    "torchvision.transforms.functional",
-]
-for module_name in MOCK_MODULES:
-    sys.modules[module_name] = Mock()
 
 
 def get_version():
     current_dir = os.path.abspath(os.path.dirname(__file__))
     root = os.path.dirname(current_dir)
-    version_file = os.path.join(root, "albumentations", "__init__.py")
+    version_file = os.path.join(root, "umentations", "__init__.py")
     with open(version_file) as f:
         return re.search(r'^__version__ = [\'"]([^\'"]*)[\'"]', f.read(), re.M).group(1)
 
@@ -64,9 +47,9 @@ source_suffix = ".rst"
 master_doc = "index"
 
 # General information about the project.
-project = "albumentations"
+project = "volumentations"
 
-authors = "Alexander Buslaev, Alex Parinov, Vladimir Iglovikov, Evegene Khvedchenya, Mikhail Druzhinin"
+authors = "Alexey Nekrasov"
 
 copyright = "{}, {}".format(datetime.datetime.now().year, authors)
 
@@ -122,7 +105,7 @@ html_logo = "logo.png"
 # -- Options for HTMLHelp output ------------------------------------------
 
 # Output file base name for HTML help builder.
-htmlhelp_basename = "albumentationsdoc"
+htmlhelp_basename = "volumentationsdoc"
 
 
 # -- Options for LaTeX output ---------------------------------------------
@@ -148,8 +131,8 @@ latex_elements = {
 latex_documents = [
     (
         master_doc,
-        "albumentations.tex",
-        "albumentations Documentation",
+        "volumentations.tex",
+        "volumentations Documentation",
         authors,
         "manual",
     )
@@ -161,7 +144,7 @@ latex_documents = [
 # One entry per manual page. List of tuples
 # (source start file, name, description, authors, manual section).
 man_pages = [
-    (master_doc, "albumentations", "albumentations Documentation", [authors], 1)
+    (master_doc, "volumentations", "volumentations Documentation", [authors], 1)
 ]
 
 
@@ -173,10 +156,10 @@ man_pages = [
 texinfo_documents = [
     (
         master_doc,
-        "albumentations",
-        "albumentations Documentation",
+        "volumentations",
+        "volumentations Documentation",
         authors,
-        "albumentations",
+        "volumentations",
         "One line description of project.",
         "Miscellaneous",
     )

@@ -1,14 +1,10 @@
-from __future__ import division
+import random
 from collections import defaultdict
 
-import random
-
 import numpy as np
-
-from volumentations.core.serialization import SerializableMeta
+from volumentations.core.serialization import SERIALIZABLE_REGISTRY, SerializableMeta
 from volumentations.core.six import add_metaclass
 from volumentations.core.utils import format_args
-from volumentations.core.serialization import SERIALIZABLE_REGISTRY
 
 __all__ = [
     "Compose",
@@ -102,7 +98,7 @@ class BaseCompose:
         return {
             "__class_fullname__": self.get_class_fullname(),
             "p": self.p,
-            "transforms": [t._to_dict() for t in self.transforms],  # skipcq: PYL-W0212
+            "transforms": [t._to_dict() for t in self.transforms],
         }
 
     def get_dict_with_id(self):
@@ -124,13 +120,14 @@ class BaseCompose:
 
 
 class Compose(BaseCompose):
-    """Compose transforms and handle all transformations regrading bounding boxes
+    """Compose transforms and handle all transformations regrading bounding boxes.
 
     Args:
         transforms (list): list of transformations to compose.
         bbox_params (BboxParams): Parameters for bounding boxes transforms
         keypoint_params (KeypointParams): Parameters for keypoints transforms
-        additional_targets (dict): Dict with keys - new target name, values - old target name. ex: {'image2': 'image'}
+        additional_targets (dict): Dict with keys - new target name,
+            values - old target name. ex: {'image2': 'image'}
         p (float): probability of applying all list of transforms. Default: 1.0.
     """
 
@@ -157,10 +154,7 @@ class Compose(BaseCompose):
         self.add_targets(additional_targets)
 
     def __call__(self, force_apply=False, **data):
-        assert isinstance(
-            force_apply, (bool, int)
-        ), "force_apply must have bool or int type"
-        need_to_run = force_apply or random.random() < self.p
+        need_to_run = force_apply or (random.random() < self.p)
         for p in self.processors.values():
             p.ensure_data_valid(data)
         transforms = (
@@ -191,8 +185,8 @@ class Compose(BaseCompose):
             {
                 "bbox_params": bbox_processor.params._to_dict()
                 if bbox_processor
-                else None,  # skipcq: PYL-W0212
-                "keypoint_params": keypoints_processor.params._to_dict()  # skipcq: PYL-W0212
+                else None,
+                "keypoint_params": keypoints_processor.params._to_dict()
                 if keypoints_processor
                 else None,
                 "additional_targets": self.additional_targets,
@@ -202,7 +196,7 @@ class Compose(BaseCompose):
 
 
 class OneOf(BaseCompose):
-    """Select one of transforms to apply
+    """Select one of transforms to apply.
 
     Args:
         transforms (list): list of transformations to compose.
@@ -278,9 +272,13 @@ class ReplayCompose(Compose):
 
     @staticmethod
     def _restore_for_replay(transform_dict):
-        """
+        """Restores dictionary of transformtaions for replay.
+
         Args:
-            transform (dict): A dictionary with serialized transform pipeline.
+            transform_dict (dict): A dictionary with serialized transform pipeline.
+
+        Returns:
+            transform (dict): Transformed dictionary.
         """
         transform = transform_dict
         applied = transform["applied"]

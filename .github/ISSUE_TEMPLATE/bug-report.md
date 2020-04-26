@@ -1,6 +1,9 @@
 ---
-name: "Bug Report"
-about: Submit a bug report to help us improve volumentations
+name: Bug report
+about: Create a report to help us improve
+title: ''
+labels: bug, help wanted
+assignees: ''
 
 ---
 
@@ -8,28 +11,48 @@ about: Submit a bug report to help us improve volumentations
 
 <!-- A clear and concise description of what the bug is. -->
 
-## To Reproduce
+### To Reproduce
 
 Steps to reproduce the behavior:
 
-1.
-2.
-3.
+1. Go to '...'
+2. Run '....'
+3. Scroll down to '....'
+4. See error
 
 <!-- If you have a code sample, error messages, stack traces, please provide it here as well -->
 
-## Expected behavior
+
+#### Code sample
+<!-- Ideally attach a minimal code sample to reproduce the decried issue.
+Minimal means having the shortest code but still preserving the bug. -->
+
+### Expected behavior
 
 <!-- A clear and concise description of what you expected to happen. -->
 
-## Environment
+### Environment
 
- - volumentations version (e.g., 0.0.1):
- - Python version (e.g., 3.7):
+Please copy and paste the output from our
+[environment collection script](https://raw.githubusercontent.com/PyTorchLightning/pytorch-lightning/master/tests/collect_env_details.py)
+(or fill out the checklist below manually).
+
+You can get the script and run it with:
+```
+wget https://raw.githubusercontent.com/PyTorchLightning/pytorch-lightning/master/tests/collect_env_details.py
+# For security purposes, please check the contents of collect_env.py before running it.
+python collect_env.py
+```
+
+ - PyTorch Version (e.g., 1.0):
  - OS (e.g., Linux):
- - How you installed albumentations (`pip`, source):
+ - How you installed PyTorch (`conda`, `pip`, source):
+ - Build command you used (if compiling from source):
+ - Python version:
+ - CUDA/cuDNN version:
+ - GPU models and configuration:
  - Any other relevant information:
 
-## Additional context
+### Additional context
 
 <!-- Add any other context about the problem here. -->
