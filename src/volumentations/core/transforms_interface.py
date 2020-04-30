@@ -1,7 +1,6 @@
 import random
-from warnings import warn
-
 from copy import deepcopy
+from warnings import warn
 
 from volumentations.core.serialization import SerializableMeta
 from volumentations.core.six import add_metaclass
@@ -17,6 +16,7 @@ __all__ = [
 
 def to_tuple(param, low=None, bias=None):
     """Convert input argument to min-max tuple
+
     Args:
         param (scalar, tuple or list of 2+ elements): Input value.
             If value is scalar, return value would be (offset - value, offset + value).

@@ -1,5 +1,4 @@
-#!/usr/bin/env python3
-# -*- coding: utf-8 -*-
+"""Sphinx configuration."""
 import datetime
 import os
 import re
@@ -12,9 +11,9 @@ sys.path.insert(0, os.path.abspath("../"))
 def get_version():
     current_dir = os.path.abspath(os.path.dirname(__file__))
     root = os.path.dirname(current_dir)
-    version_file = os.path.join(root, "umentations", "__init__.py")
+    version_file = os.path.join(root, "pyproject.toml")
     with open(version_file) as f:
-        return re.search(r'^__version__ = [\'"]([^\'"]*)[\'"]', f.read(), re.M).group(1)
+        return re.search(r'^version = [\'"]([^\'"]*)[\'"]', f.read(), re.M).group(1)
 
 
 # -- General configuration ------------------------------------------------
@@ -97,7 +96,6 @@ html_theme_options = {"collapse_navigation": True}
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,
 # so a file named "default.css" will overwrite the builtin "default.css".
-html_static_path = ["_static"]
 
 html_logo = "logo.png"
 

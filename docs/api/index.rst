@@ -6,6 +6,3 @@ API
 
    ./core
    ./augmentations
-   ./imgaug
-   ./pcaug
-   ./pytorch
