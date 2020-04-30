@@ -1,19 +1,19 @@
 Contributing
 ============
-All development is done on GitHub: https://github.com/albu/albumentations
+All development is done on GitHub: https://github.com/kumuji/volumentations
 
-If you find a bug or have a feature request file an issue at https://github.com/albu/albumentations/issues
+If you find a bug or have a feature request file an issue at https://github.com/kumuji/volumentations/issues
 
 To create a pull request:
-=======================
 
 1. Fork the repository.
 2. Clone it.
-3. Install pre-commit hook:
+3. Install development requirements:
 
 .. code-block:: bash
 
-    pip install pre-commit black flake8
+    python -m pip install poetry
+    poetry install --dev
 
 4. Initialize it from the folder with the repo:
 
@@ -23,20 +23,12 @@ To create a pull request:
 
 
 4. Make desired changes to the code.
-5. Install the library in development mode:
+5. Check if your changes passing the tests:
 
 
 .. code-block:: bash
 
-    pip install -e .[tests]
-
-
-6. Run tests:
-
-.. code-block:: bash
-
-    pytest
-
+    nox -rs
 
 7. Push code to your forked repo.
 8. Create pull request.
