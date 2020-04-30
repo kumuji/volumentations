@@ -9,7 +9,7 @@
 
 Python library for 3d data augmentaiton. Hard fork from [alumentations](https://github.com/albumentations-team/albumentations).
 
-For more information on available augmentations check [documentation](https://readthedocs.org/projects/volumentations/badge/?version=latest).
+For more information on available augmentations check [documentation](https://volumentations.readthedocs.io/en/latest/index.html).
 
 # Setup
 

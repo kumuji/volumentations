@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "volumentations"
-version = "0.1.0"
+version = "0.1.1"
 description="Point augmentations library as hard-fork of albu-team/albumentations"
 homepage="https://github.com/kumuji/volumentations"
 repository="https://github.com/kumuji/volumentations"
