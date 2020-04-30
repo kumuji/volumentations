@@ -7,7 +7,7 @@ repository="https://github.com/kumuji/volumentations"
 documentation = "https://volumentations.readthedocs.io/en/latest/"
 authors = ["kumuji <alexey@nekrasov.dev>"]
 license = "MIT"
-readme="README.rst"
+readme="README.md"
 classifiers=[
     "Development Status :: 3 - Alpha",
     "License :: OSI Approved :: MIT License",

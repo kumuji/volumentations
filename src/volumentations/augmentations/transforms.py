@@ -350,7 +350,6 @@ class RandomDropout3d(PointCloudsTransform):
         return {"indexes": sorted_indexes}
 
     def apply(self, points, indexes, **params):
-        print(len(indexes), len(points))
         return points[indexes]
 
     def apply_to_normals(self, normals, indexes, **params):
