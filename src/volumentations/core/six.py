@@ -18,18 +18,10 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-from __future__ import absolute_import
-
 import sys
 
-
-PY2 = sys.version_info[0] == 2
 PY3 = sys.version_info[0] == 3
-
-if PY3:
-    string_types = (str,)
-else:
-    string_types = (basestring,)  # noqa: F821
+string_types = (str,)
 
 
 def add_metaclass(metaclass):

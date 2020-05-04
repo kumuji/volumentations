@@ -1,5 +1,5 @@
-import random
 import math
+import random
 
 from ..core.transforms_interface import PointCloudsTransform, to_tuple
 from . import functional as F
@@ -28,6 +28,9 @@ class Scale3d(PointCloudsTransform):
 
     Targets:
         points
+        normals
+        features
+        labels
 
     """
 
@@ -54,9 +57,6 @@ class Scale3d(PointCloudsTransform):
     def apply_to_features(self, features, **params):
         return features
 
-    def apply_to_camera(self, camera, **params):
-        return camera
-
     def apply_to_labels(self, labels, **params):
         return labels
 
@@ -74,6 +74,9 @@ class RotateAroundAxis3d(PointCloudsTransform):
 
     Targets:
         points
+        normals
+        features
+        labels
 
     """
 
@@ -94,14 +97,8 @@ class RotateAroundAxis3d(PointCloudsTransform):
     def apply_to_normals(self, normals, axis, angle, **params):
         return F.rotate_around_axis(normals, axis, angle)
 
-    def apply_to_bbox(self, bbox, axis, angle, **params):
-        return F.rotate_around_axis(bbox, axis, angle)
-
     def apply_to_features(self, features, **params):
         return features
-
-    def apply_to_camera(self, camera, **params):
-        return camera
 
     def apply_to_labels(self, labels, **params):
         return labels
@@ -127,6 +124,9 @@ class Crop3d(PointCloudsTransform):
 
     Targets:
         points
+        normals
+        features
+        labels
 
     """
 
@@ -178,9 +178,6 @@ class Crop3d(PointCloudsTransform):
     def apply_to_features(self, features, indexes, **params):
         return features[indexes]
 
-    def apply_to_camera(self, camera, **params):
-        return camera
-
     def get_transform_init_args_names(self):
         return ("x_min", "y_min", "z_min", "x_max", "y_max", "z_max")
 
@@ -193,6 +190,9 @@ class Center3d(PointCloudsTransform):
 
     Targets:
         points
+        normals
+        features
+        labels
 
     """
 
@@ -208,9 +208,6 @@ class Center3d(PointCloudsTransform):
 
     def apply_to_features(self, features, **params):
         return features
-
-    def apply_to_camera(self, camera, **params):
-        return camera
 
     def apply_to_labels(self, labels, **params):
         return labels
@@ -230,6 +227,9 @@ class Move3d(PointCloudsTransform):
 
     Targets:
         points
+        normals
+        features
+        labels
 
     """
 
@@ -242,12 +242,6 @@ class Move3d(PointCloudsTransform):
 
     def apply(self, points, offset, **params):
         return F.move(points, offset)
-
-    def apply_to_camera(self, camera, **params):
-        return camera
-
-    def apply_to_bbox(self, bbox, offset, **params):
-        return F.move(bbox, offset)
 
     def apply_to_normals(self, normals, **params):
         return normals
@@ -278,6 +272,9 @@ class RandomMove3d(Move3d):
 
     Targets:
         points
+        normals
+        features
+        labels
 
     """
 
@@ -330,6 +327,9 @@ class RandomDropout3d(PointCloudsTransform):
 
     Targets:
         points
+        normals
+        features
+        labels
 
     """
 
@@ -361,12 +361,6 @@ class RandomDropout3d(PointCloudsTransform):
     def apply_to_features(self, features, indexes, **params):
         return features[indexes]
 
-    def apply_to_camera(self, camera, **params):
-        return camera
-
-    def apply_to_bbox(self, bbox, **params):
-        return bbox
-
     def get_transform_init_args(self):
         return {"dropout_ratio": self.dropout_ratio}
 
@@ -381,6 +375,9 @@ class Flip3d(PointCloudsTransform):
 
     Targets:
         points
+        normals
+        features
+        labels
 
     """
 
@@ -391,14 +388,8 @@ class Flip3d(PointCloudsTransform):
     def apply(self, points, **params):
         return F.rotate_around_axis(points, axis=self.axis, angle=math.pi)
 
-    def apply_to_normals(self, normals, indexes, **params):
+    def apply_to_normals(self, normals, **params):
         return F.rotate_around_axis(normals, axis=self.axis, angle=math.pi)
-
-    def apply_to_bbox(self, bbox, **params):
-        return F.rotate_around_axis(bbox, axis=self.axis, angle=math.pi)
-
-    def apply_to_camera(self, camera, **params):
-        return camera
 
     def apply_to_features(self, features, **params):
         return features

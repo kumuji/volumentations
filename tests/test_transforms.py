@@ -1,6 +1,5 @@
 import numpy as np
 import pytest
-
 import volumentations as V
 import volumentations.augmentations.functional as F
 
@@ -22,10 +21,11 @@ def __test_multiprocessing_support_proc(args):
         [V.RandomDropout3d, {"dropout_ratio": 0}],
     ],
 )
-def test_multiprocessing_support(augmentation_cls, params, multiprocessing_context):
+def test_multiprocessing_support(
+    augmentation_cls, params, multiprocessing_context, points
+):
     """Checks whether we can use augmentations in multiprocessing environments"""
     aug = augmentation_cls(p=1, **params)
-    points = np.empty((100, 3))
 
     pool = multiprocessing_context.Pool(8)
     pool.map(
