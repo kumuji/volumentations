@@ -1,6 +1,5 @@
 import numpy as np
 import pytest
-
 import volumentations.augmentations.functional as F
 
 
@@ -44,6 +43,16 @@ def test_crop(points, expected_points, min_max):
         )
     ]
     assert np.allclose(expected_points, processed_points)
+
+
+def test_crop_should_fail(points):
+    try:
+        F.crop(
+            points, x_min=10, x_max=0, y_min=0, y_max=10, z_min=0, z_max=10,
+        )
+        assert False, "Crop input limits check didn't work"
+    except ValueError:
+        pass
 
 
 @pytest.mark.parametrize(

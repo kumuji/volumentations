@@ -124,20 +124,13 @@ class Compose(BaseCompose):
 
     Args:
         transforms (list): list of transformations to compose.
-        bbox_params (BboxParams): Parameters for bounding boxes transforms
-        keypoint_params (KeypointParams): Parameters for keypoints transforms
         additional_targets (dict): Dict with keys - new target name,
             values - old target name. ex: {'image2': 'image'}
         p (float): probability of applying all list of transforms. Default: 1.0.
     """
 
     def __init__(
-        self,
-        transforms,
-        bbox_params=None,
-        keypoint_params=None,
-        additional_targets=None,
-        p=1.0,
+        self, transforms, additional_targets=None, p=1.0,
     ):
         super(Compose, self).__init__([t for t in transforms if t is not None], p)
 
@@ -179,19 +172,7 @@ class Compose(BaseCompose):
 
     def _to_dict(self):
         dictionary = super(Compose, self)._to_dict()
-        bbox_processor = self.processors.get("bboxes")
-        keypoints_processor = self.processors.get("keypoints")
-        dictionary.update(
-            {
-                "bbox_params": bbox_processor.params._to_dict()
-                if bbox_processor
-                else None,
-                "keypoint_params": keypoints_processor.params._to_dict()
-                if keypoints_processor
-                else None,
-                "additional_targets": self.additional_targets,
-            }
-        )
+        dictionary.update({"additional_targets": self.additional_targets})
         return dictionary
 
 
@@ -242,17 +223,9 @@ class OneOrOther(BaseCompose):
 
 class ReplayCompose(Compose):
     def __init__(
-        self,
-        transforms,
-        bbox_params=None,
-        keypoint_params=None,
-        additional_targets=None,
-        p=1.0,
-        save_key="replay",
+        self, transforms, additional_targets=None, p=1.0, save_key="replay",
     ):
-        super(ReplayCompose, self).__init__(
-            transforms, bbox_params, keypoint_params, additional_targets, p
-        )
+        super(ReplayCompose, self).__init__(transforms, additional_targets, p)
         self.set_deterministic(True, save_key=save_key)
         self.save_key = save_key
 
