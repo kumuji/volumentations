@@ -1,7 +1,7 @@
 volumentations
 ==============
 
-Python library for 3d data augmentaiton. Hard fork from `alumentations <https://github.com/albumentations-team/albumentations)>`_
+Python library for 3d data augmentaiton. Hard fork from `alumentations <https://github.com/albumentations-team/albumentations>`_
 
 Features
 --------
@@ -31,7 +31,7 @@ If you want to get the latest version of the code before it is released on PyPI 
 
 Demo
 ----
-You can use this `Google Colaboratory notebook <https://colab.research.google.com/>`_
+You can use this `Google Colaboratory notebook <https://drive.google.com/file/d/1CT9nIGME_M4kIDc3BfEF4pCb_8JdFLpH/view?usp=sharing>`_
 to adjust image augmentation parameters and see the resulting images.
 
 
