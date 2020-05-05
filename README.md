@@ -12,7 +12,7 @@ Python library for 3d data augmentaiton. Hard fork from [alumentations](https://
 For more information on available augmentations check [documentation](https://volumentations.readthedocs.io/en/latest/index.html).
 
 Or, check simple example in colab:
-[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://drive.google.com/file/d/1CT9nIGME_M4kIDc3BfEF4pCb_8JdFLpH/view?usp=sharing)
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/drive/1CT9nIGME_M4kIDc3BfEF4pCb_8JdFLpH)
 
 # Setup
 
