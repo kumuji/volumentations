@@ -5,6 +5,8 @@
 [![Code Style: Black](https://img.shields.io/badge/code%20style-black-black.svg)](https://github.com/ambv/black)
 [![Downloads](https://pepy.tech/badge/volumentations)](https://pepy.tech/project/volumentations)
 
+![logo](./docs/logo.png "logo")
+
 # Volumentations
 
 Python library for 3d data augmentaiton. Hard fork from [alumentations](https://github.com/albumentations-team/albumentations).
@@ -24,20 +26,36 @@ Or, check simple example in colab:
 import volumentations as V
 import numpy as np
 
-volume_aug = V.Compose(
+augmentation = V.Compose(
     [
-        V.Scale3d(scale_limit=[0.1, 0.1, 0.1], bias=[1, 1, 1]),
-        V.RotateAroundAxis3d(axis=[0, 0, 1], rotation_limit=np.pi / 6),
-        V.RotateAroundAxis3d(axis=[0, 1, 0], rotation_limit=np.pi / 6),
-        V.RotateAroundAxis3d(axis=[1, 0, 0], rotation_limit=np.pi / 6),
-        V.RandomDropout3d(dropout_ratio=0.2),
+        V.Scale3d(scale_limit=(0.2, 0.2, 0.1), p=0.75),
+        V.OneOrOther(
+            V.Compose(
+                [
+                    V.RotateAroundAxis3d(
+                        rotation_limit=np.pi, axis=(0, 0, 1), always_apply=True
+                    ),
+                    V.RotateAroundAxis3d(
+                        rotation_limit=np.pi / 3, axis=(0, 1, 0), always_apply=True
+                    ),
+                    V.RotateAroundAxis3d(
+                        rotation_limit=np.pi / 3, axis=(1, 0, 0), always_apply=True
+                    ),
+                ],
+                p=1,
+            ),
+            V.Flip3d(axis=(0, 0, 1)),
+        ),
+        V.OneOf(
+            [
+                V.RandomDropout3d(dropout_ratio=0.2, p=0.75),
+                V.RandomDropout3d(dropout_ratio=0.3, p=0.5),
+            ]
+        ),
     ]
 )
-original_point_cloud = np.empty((1000, 3))
-augmented_point_cloud = volume_aug(points=original_point_cloud)["points"]
 
+augmented_teapot = augmentation(points=teapot.copy())["points"]
+show_augmentation(teapot, augmented_teapot)
 ```
-
-```
-# So far the package in WIP stage
-```
+![augmented_teapot](./docs/augmented_teapot.png "teapot")
