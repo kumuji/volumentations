@@ -1,14 +1,22 @@
+from typing import Any, List, Tuple, Union
+
 import numpy as np
+from numpy import ndarray
 
 
-def scale(points, scale_factor=(1, 1, 1)):
+def scale(
+    points: ndarray,
+    scale_factor: Union[Tuple[float, float, float], List[float], ndarray] = (1, 1, 1),
+) -> ndarray:
     transformation_matrix = np.eye(3)
     np.fill_diagonal(transformation_matrix, scale_factor)
     points[:, :3] = np.dot(points[:, :3], transformation_matrix)
     return points
 
 
-def rotate_around_axis(points, axis, angle):
+def rotate_around_axis(
+    points: ndarray, axis: Tuple[float, float, float], angle: float,
+) -> ndarray:
     """
     Return the rotation matrix associated with counterclockwise rotation about
     the given axis by angle in radians.
@@ -16,7 +24,7 @@ def rotate_around_axis(points, axis, angle):
     """
     axis = axis / np.sqrt(np.dot(axis, axis))
     a = np.cos(angle / 2.0)
-    b, c, d = -axis * np.sin(angle / 2.0)
+    b, c, d = -1 * axis * np.sin(angle / 2.0)
     aa, bb, cc, dd = a * a, b * b, c * c, d * d
     bc, ad, ac, ab, bd, cd = b * c, a * d, a * c, a * b, b * d, c * d
     rotation_matrix = np.array(
@@ -30,7 +38,15 @@ def rotate_around_axis(points, axis, angle):
     return points
 
 
-def crop(points, x_min, y_min, z_min, x_max, y_max, z_max):
+def crop(
+    points: ndarray,
+    x_min: float,
+    y_min: float,
+    z_min: float,
+    x_max: float,
+    y_max: float,
+    z_max: float,
+) -> ndarray:
     if x_max <= x_min or y_max <= y_min or z_max <= z_min:
         raise ValueError(
             "We should have x_min < x_max and y_min < y_max and z_min < z_max. But we got"
@@ -58,11 +74,15 @@ def crop(points, x_min, y_min, z_min, x_max, y_max, z_max):
     return inds
 
 
-def center(points, origin=(0, 0, 0)):
+def center(
+    points: ndarray, origin: Union[Tuple[float, float, float], ndarray] = (0, 0, 0),
+) -> ndarray:
     points[:, :3] -= origin + points[:, :3].mean(axis=0)
     return points
 
 
-def move(points, offset=(0, 0, 0)):
+def move(
+    points: ndarray, offset: Union[Tuple[float, float, float], ndarray] = (0, 0, 0),
+) -> ndarray:
     points[:, :3] = points[:, :3] + offset
     return points

@@ -1,7 +1,9 @@
 import random
 from copy import deepcopy
+from typing import Any, Callable, Dict, List, Optional, Tuple, Union
 from warnings import warn
 
+from numpy import ndarray
 from volumentations.core.serialization import SerializableMeta
 from volumentations.core.six import add_metaclass
 from volumentations.core.utils import format_args
@@ -14,7 +16,12 @@ __all__ = [
 ]
 
 
-def to_tuple(param, low=None, bias=None):
+def to_tuple(
+    param,  # type: Union[List[int], Tuple[int, int], float]
+    low=None,  # type: Optional[int]
+    bias=None,  # type: Optional[int]
+):
+    # type: (...) -> Tuple[float, float]
     """Convert input argument to min-max tuple
 
     Args:
@@ -51,6 +58,7 @@ class BasicTransform:
     call_backup = None
 
     def __init__(self, always_apply=False, p=0.5):
+        # type: (bool, float) -> None
         self.p = p
         self.always_apply = always_apply
         self._additional_targets = {}
@@ -63,6 +71,7 @@ class BasicTransform:
         self.applied_in_replay = False
 
     def __call__(self, force_apply=False, **kwargs):
+        # type: (bool, **Any) -> Dict[str, ndarray]
         if self.replay_mode:
             if self.applied_in_replay:
                 return self.apply_with_params(self.params, **kwargs)
@@ -98,6 +107,7 @@ class BasicTransform:
     def apply_with_params(
         self, params, force_apply=False, **kwargs
     ):  # skipcq: PYL-W0613
+        # type: (Dict[str, Any], bool, **Any) -> Dict[str, ndarray]
         if params is None:
             return kwargs
         params = self.update_params(params, **kwargs)
@@ -127,6 +137,7 @@ class BasicTransform:
         )
 
     def _get_target_function(self, key):
+        # type: (str) -> Callable
         transform_key = key
         if key in self._additional_targets:
             transform_key = self._additional_targets.get(key, None)
@@ -138,6 +149,7 @@ class BasicTransform:
         raise NotImplementedError
 
     def get_params(self):
+        # type: () -> Dict
         return {}
 
     @property
@@ -148,13 +160,16 @@ class BasicTransform:
         raise NotImplementedError
 
     def update_params(self, params, **kwargs):
+        # type: (Dict[str, Any], **Any) -> Dict[str, Any]
         return params
 
     @property
     def target_dependence(self):
+        # type: () -> Dict
         return {}
 
     def add_targets(self, additional_targets):
+        # type: (Dict[str, str]) -> None
         """Add targets to transform them the same way as one of existing targets
         ex: {'normals1': 'normals', 'normals2': 'normals'}
 
@@ -166,6 +181,7 @@ class BasicTransform:
 
     @property
     def targets_as_params(self):
+        # type: () -> List
         return []
 
     def get_params_dependent_on_targets(self, params):
@@ -176,6 +192,7 @@ class BasicTransform:
 
     @classmethod
     def get_class_fullname(cls):
+        # type: () -> str
         return "{cls.__module__}.{cls.__name__}".format(cls=cls)
 
     def get_transform_init_args_names(self):
@@ -185,12 +202,14 @@ class BasicTransform:
         )
 
     def get_base_init_args(self):
+        # type: () -> Dict[str, Any]
         return {"always_apply": self.always_apply, "p": self.p}
 
     def get_transform_init_args(self):
         return {k: getattr(self, k) for k in self.get_transform_init_args_names()}
 
     def _to_dict(self):
+        # type: () -> Dict[str, Any]
         state = {"__class_fullname__": self.get_class_fullname()}
         state.update(self.get_base_init_args())
         state.update(self.get_transform_init_args())
@@ -207,6 +226,7 @@ class PointCloudsTransform(BasicTransform):
 
     @property
     def targets(self):
+        # type: () -> Dict[str, Callable]
         return {
             "points": self.apply,
             "normals": self.apply_to_normals,

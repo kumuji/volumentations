@@ -594,6 +594,18 @@ version = "1.8.1"
 
 [[package]]
 category = "dev"
+description = "PyAnnotate: Auto-generate PEP-484 annotations"
+name = "pyannotate"
+optional = false
+python-versions = "*"
+version = "1.2.0"
+
+[package.dependencies]
+mypy-extensions = "*"
+six = "*"
+
+[[package]]
+category = "dev"
 description = "Python style guide checker"
 name = "pycodestyle"
 optional = false
@@ -660,6 +672,18 @@ version = ">=0.12"
 [package.extras]
 checkqa-mypy = ["mypy (v0.761)"]
 testing = ["argcomplete", "hypothesis (>=3.56)", "mock", "nose", "requests", "xmlschema"]
+
+[[package]]
+category = "dev"
+description = "pytest-annotate: Generate PyAnnotate annotations from your pytest tests."
+name = "pytest-annotate"
+optional = false
+python-versions = ">=2.7,!=3.0.*,!=3.1.*,!=3.2.*,!=3.3.*,!=3.5.0,!=3.5.1"
+version = "1.0.3"
+
+[package.dependencies]
+pyannotate = ">=1.0.0,<2.0.0"
+pytest = ">=3.2.0,<6.0.0"
 
 [[package]]
 category = "dev"
@@ -1024,7 +1048,7 @@ docs = ["sphinx", "jaraco.packaging (>=3.2)", "rst.linker (>=1.9)"]
 testing = ["jaraco.itertools", "func-timeout"]
 
 [metadata]
-content-hash = "27ab9f5a3a0079fbbca07f37cc57ef3eb88faccb9d1c90ec6ddc91b48e9a35a5"
+content-hash = "d30e3f749d49ceffe2b1dc9db579a1067528497af77447f6c1ace08c31bdfa12"
 python-versions = "^3.6.1"
 
 [metadata.files]
@@ -1319,6 +1343,10 @@ py = [
     {file = "py-1.8.1-py2.py3-none-any.whl", hash = "sha256:c20fdd83a5dbc0af9efd622bee9a5564e278f6380fffcacc43ba6f43db2813b0"},
     {file = "py-1.8.1.tar.gz", hash = "sha256:5e27081401262157467ad6e7f851b7aa402c5852dbcb3dae06768434de5752aa"},
 ]
+pyannotate = [
+    {file = "pyannotate-1.2.0-py2.py3-none-any.whl", hash = "sha256:bc2b5b4ea57aa90f99da9d71b547262eed19ea4b6ba355bf57439eeab9b90e93"},
+    {file = "pyannotate-1.2.0.tar.gz", hash = "sha256:04ed5804bab38153d5981fc92d83dcf6a22883453768561f057e777e5c057599"},
+]
 pycodestyle = [
     {file = "pycodestyle-2.5.0-py2.py3-none-any.whl", hash = "sha256:95a2219d12372f05704562a14ec30bc76b05a5b297b21a5dfe3f6fac3491ae56"},
     {file = "pycodestyle-2.5.0.tar.gz", hash = "sha256:e40a936c9a450ad81df37f549d676d127b1b66000a6c500caa2b085bc0ca976c"},
@@ -1342,6 +1370,10 @@ pyparsing = [
 pytest = [
     {file = "pytest-5.4.2-py3-none-any.whl", hash = "sha256:95c710d0a72d91c13fae35dce195633c929c3792f54125919847fdcdf7caa0d3"},
     {file = "pytest-5.4.2.tar.gz", hash = "sha256:eb2b5e935f6a019317e455b6da83dd8650ac9ffd2ee73a7b657a30873d67a698"},
+]
+pytest-annotate = [
+    {file = "pytest-annotate-1.0.3.tar.gz", hash = "sha256:1ef5924aca93a7b47edaf46a38284fb5a173eed5e3b1a93ec00c8e35f0dd76ab"},
+    {file = "pytest_annotate-1.0.3-py2.py3-none-any.whl", hash = "sha256:356491bea0921c64bb690732f393dd4a0e1eaea27b6663f4b908d1d6d0351ca2"},
 ]
 pytest-cov = [
     {file = "pytest-cov-2.8.1.tar.gz", hash = "sha256:cc6742d8bac45070217169f5f72ceee1e0e55b0221f54bcf24845972d3a47f2b"},

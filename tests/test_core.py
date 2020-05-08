@@ -16,6 +16,7 @@ from volumentations.core.transforms_interface import PointCloudsTransform, to_tu
 
 
 def test_one_or_other():
+    # type: () -> None
     first = MagicMock()
     second = MagicMock()
     augmentation = OneOrOther(first, second, p=1)
@@ -25,6 +26,7 @@ def test_one_or_other():
 
 
 def test_compose():
+    # type: () -> None
     first = MagicMock()
     second = MagicMock()
     augmentation = Compose([first, second], p=1)
@@ -44,6 +46,7 @@ def oneof_always_apply_crash():
 
 
 def test_always_apply():
+    # type: () -> None
     first = MagicMock(always_apply=True)
     second = MagicMock(always_apply=False)
     augmentation = Compose([first, second], p=0)
@@ -54,6 +57,7 @@ def test_always_apply():
 
 
 def test_one_of():
+    # type: () -> None
     transforms = [Mock(p=1) for _ in range(10)]
     augmentation = OneOf(transforms, p=1)
     points = np.ones((10, 3))
@@ -62,6 +66,7 @@ def test_one_of():
 
 
 def test_to_tuple():
+    # type: () -> None
     assert to_tuple(10) == (-10, 10)
     assert to_tuple(0.5) == (-0.5, 0.5)
     assert to_tuple((-20, 20)) == (-20, 20)

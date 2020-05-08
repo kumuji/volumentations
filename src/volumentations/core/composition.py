@@ -1,7 +1,9 @@
 import random
 from collections import defaultdict
+from typing import Any, Dict, List, Optional
 
 import numpy as np
+from numpy import ndarray
 from volumentations.core.serialization import SERIALIZABLE_REGISTRY, SerializableMeta
 from volumentations.core.six import add_metaclass
 from volumentations.core.utils import format_args
@@ -18,11 +20,11 @@ REPR_INDENT_STEP = 2
 
 
 class Transforms:
-    def __init__(self, transforms):
+    def __init__(self, transforms: List[Any]) -> None:
         self.transforms = transforms
         self.start_end = self._find_dual_start_end(transforms)
 
-    def _find_dual_start_end(self, transforms):
+    def _find_dual_start_end(self, transforms: Any) -> Optional[Any]:
         dual_start_end = None
         last_dual = None
         for idx, transform in enumerate(transforms):
@@ -36,7 +38,7 @@ class Transforms:
             dual_start_end.append(last_dual)
         return dual_start_end
 
-    def get_always_apply(self, transforms):
+    def get_always_apply(self, transforms: Any) -> Any:
         new_transforms = []
         for transform in transforms:
             if isinstance(transform, BaseCompose):
@@ -45,7 +47,7 @@ class Transforms:
                 new_transforms.append(transform)
         return Transforms(new_transforms)
 
-    def __getitem__(self, item):
+    def __getitem__(self, item: int):
         return self.transforms[item]
 
 
@@ -56,14 +58,14 @@ def set_always_apply(transforms):
 
 @add_metaclass(SerializableMeta)
 class BaseCompose:
-    def __init__(self, transforms, p):
+    def __init__(self, transforms: List[Any], p: float):
         self.transforms = Transforms(transforms)
         self.p = p
 
         self.replay_mode = False
         self.applied_in_replay = False
 
-    def __getitem__(self, item):
+    def __getitem__(self, item: int):
         return self.transforms[item]
 
     def __repr__(self):
@@ -91,17 +93,17 @@ class BaseCompose:
         return repr_string
 
     @classmethod
-    def get_class_fullname(cls):
+    def get_class_fullname(cls) -> str:
         return "{cls.__module__}.{cls.__name__}".format(cls=cls)
 
-    def _to_dict(self):
+    def _to_dict(self) -> Dict[str, Any]:
         return {
             "__class_fullname__": self.get_class_fullname(),
             "p": self.p,
             "transforms": [t._to_dict() for t in self.transforms],
         }
 
-    def get_dict_with_id(self):
+    def get_dict_with_id(self) -> Dict[str, Any]:
         return {
             "__class_fullname__": self.get_class_fullname(),
             "id": id(self),
@@ -109,12 +111,12 @@ class BaseCompose:
             "transforms": [t.get_dict_with_id() for t in self.transforms],
         }
 
-    def add_targets(self, additional_targets):
+    def add_targets(self, additional_targets: Dict[str, str]) -> None:
         if additional_targets:
             for t in self.transforms:
                 t.add_targets(additional_targets)
 
-    def set_deterministic(self, flag, save_key="replay"):
+    def set_deterministic(self, flag, save_key: Optional[str] = "replay") -> None:
         for t in self.transforms:
             t.set_deterministic(flag, save_key)
 
@@ -130,7 +132,10 @@ class Compose(BaseCompose):
     """
 
     def __init__(
-        self, transforms, additional_targets=None, p=1.0,
+        self,
+        transforms: List[Any],
+        additional_targets: Optional[Dict[str, str]] = None,
+        p: float = 1.0,
     ):
         super().__init__([t for t in transforms if t is not None], p)
 
@@ -146,7 +151,9 @@ class Compose(BaseCompose):
 
         self.add_targets(additional_targets)
 
-    def __call__(self, force_apply=False, **data):
+    def __call__(
+        self, force_apply: Optional[bool] = False, **data: Any
+    ) -> Dict[str, ndarray]:
         need_to_run = force_apply or (random.random() < self.p)
         for p in self.processors.values():
             p.ensure_data_valid(data)
@@ -170,7 +177,7 @@ class Compose(BaseCompose):
 
         return data
 
-    def _to_dict(self):
+    def _to_dict(self) -> Dict[str, Any]:
         dictionary = super()._to_dict()
         dictionary.update({"additional_targets": self.additional_targets})
         return dictionary
@@ -184,13 +191,15 @@ class OneOf(BaseCompose):
         p (float): probability of applying selected transform. Default: 0.5.
     """
 
-    def __init__(self, transforms, p=0.5):
+    def __init__(self, transforms: List[Any], p: Optional[float] = 0.5) -> None:
         super().__init__(transforms, p)
         transforms_ps = [t.p for t in transforms]
         s = sum(transforms_ps)
         self.transforms_ps = [t / s for t in transforms_ps]
 
-    def __call__(self, force_apply=False, **data):
+    def __call__(
+        self, force_apply: Optional[bool] = False, **data: Any
+    ) -> Dict[str, ndarray]:
         if self.replay_mode:
             for t in self.transforms:
                 data = t(**data)
@@ -204,12 +213,20 @@ class OneOf(BaseCompose):
 
 
 class OneOrOther(BaseCompose):
-    def __init__(self, first=None, second=None, transforms=None, p=0.5):
+    def __init__(
+        self,
+        first: Optional[Any] = None,
+        second: Optional[Any] = None,
+        transforms: Optional[List[Any]] = None,
+        p: Optional[float] = 0.5,
+    ) -> None:
         if transforms is None:
             transforms = [first, second]
         super().__init__(transforms, p)
 
-    def __call__(self, force_apply=False, **data):
+    def __call__(
+        self, force_apply: Optional[bool] = False, **data: Any
+    ) -> Dict[str, ndarray]:
         if self.replay_mode:
             for t in self.transforms:
                 data = t(**data)
@@ -223,13 +240,19 @@ class OneOrOther(BaseCompose):
 
 class ReplayCompose(Compose):
     def __init__(
-        self, transforms, additional_targets=None, p=1.0, save_key="replay",
-    ):
+        self,
+        transforms: List[Any],
+        additional_targets: Optional[Any] = None,
+        p: Optional[float] = 1.0,
+        save_key: Optional[str] = "replay",
+    ) -> None:
         super().__init__(transforms, additional_targets, p)
         self.set_deterministic(True, save_key=save_key)
         self.save_key = save_key
 
-    def __call__(self, force_apply=False, **kwargs):
+    def __call__(
+        self, force_apply: Optional[bool] = False, **kwargs: Any
+    ) -> Dict[str, ndarray]:
         kwargs[self.save_key] = defaultdict(dict)
         result = super().__call__(force_apply=force_apply, **kwargs)
         serialized = self.get_dict_with_id()

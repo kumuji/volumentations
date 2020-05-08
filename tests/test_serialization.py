@@ -1,9 +1,12 @@
 import random
+from typing import Any, Dict
 from unittest.mock import patch
 
 import numpy as np
 import pytest
 import volumentations as V
+from numpy import ndarray
+from volumentations.core.serialization import SerializableMeta
 
 from .utils import OpenMock
 
@@ -11,6 +14,7 @@ TEST_SEEDS = (0, 1, 42, 111, 9999)
 
 
 def set_seed(seed):
+    # type: (int) -> None
     random.seed(seed)
     np.random.seed(seed)
 
@@ -59,8 +63,14 @@ AUGMENTATION_CLS_PARAMS = (
 @pytest.mark.parametrize("seed", TEST_SEEDS)
 @pytest.mark.parametrize("always_apply", (False, True))
 def test_augmentations_serialization_with_custom_parameters(
-    augmentation_cls, params, p, seed, points, always_apply
+    augmentation_cls,  # type: SerializableMeta
+    params,  # type: Dict[str, Any]
+    p,  # type: float
+    seed,  # type: int
+    points,  # type: ndarray
+    always_apply,  # type: bool
 ):
+    # type: (...) -> None
     aug = augmentation_cls(p=p, always_apply=always_apply, **params)
     serialized_aug = V.to_dict(aug)
     deserialized_aug = V.from_dict(serialized_aug)
@@ -93,6 +103,7 @@ def test_augmentations_serialization_to_file_with_custom_parameters(
 
 @pytest.mark.parametrize("seed", TEST_SEEDS)
 def test_transform_pipeline_serialization(seed, points):
+    # type: (int, ndarray) -> None
     aug = V.Compose(
         [
             V.OneOrOther(

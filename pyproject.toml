@@ -51,6 +51,8 @@ xdoctest = "^0.12.0"
 sphinx = "<3.0"
 sphinx-autodoc-typehints = "^1.10.3"
 sphinx_rtd_theme = "^0.4.3"
+pytest-annotate = "^1.0.3"
+pyannotate = "^1.2.0"
 
 [tool.coverage.paths]
 source = ["src", "*/site-packages"]

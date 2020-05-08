@@ -1,5 +1,8 @@
 import math
 import random
+from typing import Any, Dict, List, Optional, Tuple, Union
+
+from numpy import ndarray
 
 from ..core.transforms_interface import PointCloudsTransform, to_tuple
 from . import functional as F
@@ -35,32 +38,46 @@ class Scale3d(PointCloudsTransform):
     """
 
     def __init__(
-        self, scale_limit=(0.1, 0.1, 0.1), bias=(1, 1, 1), always_apply=False, p=0.5,
-    ):
+        self,
+        scale_limit: Optional[
+            Union[
+                List[Tuple[float, float]],
+                List[Tuple[int, int]],
+                Tuple[float, float, float],
+            ]
+        ] = (0.1, 0.1, 0.1),
+        bias: Optional[Tuple[float, float, float]] = (1, 1, 1),
+        always_apply: Optional[bool] = False,
+        p: Optional[float] = 0.5,
+    ) -> None:
         super().__init__(always_apply, p)
         self.scale_limit = []
         for limit, bias_for_axis in zip(scale_limit, bias):
             self.scale_limit.append(to_tuple(limit, bias=bias_for_axis))
 
-    def get_params(self):
+    def get_params(self) -> Dict[str, List[float]]:
         scale = []
         for limit in self.scale_limit:
             scale.append(random.uniform(limit[0], limit[1]))
         return {"scale": scale}
 
-    def apply(self, points, scale=(1, 1, 1), **params):
+    def apply(
+        self, points: ndarray, scale: Optional[List[float]] = (1, 1, 1), **params: Any
+    ) -> ndarray:
         return F.scale(points, scale)
 
-    def apply_to_normals(self, normals, **params):
+    def apply_to_normals(self, normals: ndarray, **params: Any) -> ndarray:
         return normals
 
-    def apply_to_features(self, features, **params):
+    def apply_to_features(self, features: ndarray, **params: Any) -> ndarray:
         return features
 
-    def apply_to_labels(self, labels, **params):
+    def apply_to_labels(self, labels: ndarray, **params: Any):
         return labels
 
-    def get_transform_init_args(self):
+    def get_transform_init_args(
+        self,
+    ) -> Union[Dict[str, List[Tuple[float, float]]], Dict[str, List[Tuple[int, int]]]]:
         return {"scale_limit": self.scale_limit}
 
 
@@ -82,29 +99,41 @@ class RotateAroundAxis3d(PointCloudsTransform):
     """
 
     def __init__(
-        self, rotation_limit=math.pi / 2, axis=(0, 0, 1), always_apply=False, p=0.5,
-    ):
+        self,
+        rotation_limit: Optional[Union[Tuple[float, float], float]] = math.pi / 2,
+        axis: Optional[Tuple[int, int, int]] = (0, 0, 1),
+        always_apply: Optional[bool] = False,
+        p: Optional[float] = 0.5,
+    ) -> None:
         super().__init__(always_apply, p)
         self.rotation_limit = to_tuple(rotation_limit, bias=0)
         self.axis = axis
 
-    def get_params(self):
+    def get_params(self) -> Dict[str, Any]:
         angle = random.uniform(self.rotation_limit[0], self.rotation_limit[1])
         return {"angle": angle, "axis": self.axis}
 
-    def apply(self, points, axis, angle, **params):
+    def apply(
+        self,
+        points: ndarray,
+        axis: Union[List[int], Tuple[int, int, int]],
+        angle: float,
+        **params: Any,
+    ) -> ndarray:
         return F.rotate_around_axis(points, axis, angle)
 
-    def apply_to_normals(self, normals, axis, angle, **params):
+    def apply_to_normals(
+        self, normals: ndarray, axis: Tuple[int, int, int], angle: float, **params: Any
+    ) -> ndarray:
         return F.rotate_around_axis(normals, axis, angle)
 
-    def apply_to_features(self, features, **params):
+    def apply_to_features(self, features: ndarray, **params: Any) -> ndarray:
         return features
 
-    def apply_to_labels(self, labels, **params):
+    def apply_to_labels(self, labels: ndarray, **params: Any) -> ndarray:
         return labels
 
-    def get_transform_init_args(self):
+    def get_transform_init_args(self) -> Dict[str, Any]:
         return {
             "rotation_limit": to_tuple(self.rotation_limit, bias=0),
             "axis": self.axis,
@@ -133,15 +162,15 @@ class Crop3d(PointCloudsTransform):
 
     def __init__(
         self,
-        x_min=-math.inf,
-        y_min=-math.inf,
-        z_min=-math.inf,
-        x_max=math.inf,
-        y_max=math.inf,
-        z_max=math.inf,
-        always_apply=False,
-        p=1.0,
-    ):
+        x_min: Optional[float] = -math.inf,
+        y_min: Optional[float] = -math.inf,
+        z_min: Optional[float] = -math.inf,
+        x_max: Optional[float] = math.inf,
+        y_max: Optional[float] = math.inf,
+        z_max: Optional[float] = math.inf,
+        always_apply: Optional[float] = False,
+        p: Optional[float] = 1.0,
+    ) -> None:
         super().__init__(always_apply, p)
         self.x_min = x_min
         self.y_min = y_min
@@ -151,10 +180,12 @@ class Crop3d(PointCloudsTransform):
         self.z_max = z_max
 
     @property
-    def targets_as_params(self):
+    def targets_as_params(self) -> List[str]:
         return ["points"]
 
-    def get_params_dependent_on_targets(self, params):
+    def get_params_dependent_on_targets(
+        self, params: Dict[str, ndarray]
+    ) -> Dict[str, ndarray]:
         return {
             "indexes": F.crop(
                 params["points"],
@@ -167,19 +198,25 @@ class Crop3d(PointCloudsTransform):
             )
         }
 
-    def apply(self, points, indexes, **params):
+    def apply(self, points: ndarray, indexes: ndarray, **params: Any) -> ndarray:
         return points[indexes]
 
-    def apply_to_normals(self, normals, indexes, **params):
+    def apply_to_normals(
+        self, normals: ndarray, indexes: ndarray, **params: Any
+    ) -> ndarray:
         return normals[indexes]
 
-    def apply_to_labels(self, labels, indexes, **params):
+    def apply_to_labels(
+        self, labels: ndarray, indexes: ndarray, **params: Any
+    ) -> ndarray:
         return labels[indexes]
 
-    def apply_to_features(self, features, indexes, **params):
+    def apply_to_features(
+        self, features: ndarray, indexes: ndarray, **params: Any
+    ) -> ndarray:
         return features[indexes]
 
-    def get_transform_init_args_names(self):
+    def get_transform_init_args_names(self) -> Tuple[str, str, str, str, str, str]:
         return ("x_min", "y_min", "z_min", "x_max", "y_max", "z_max")
 
 
@@ -197,23 +234,28 @@ class Center3d(PointCloudsTransform):
 
     """
 
-    def __init__(self, offset=(0, 0, 0), always_apply=False, p=0.5):
+    def __init__(
+        self,
+        offset: Optional[Union[List[int], Tuple[int, int, int]]] = (0, 0, 0),
+        always_apply: Optional[bool] = False,
+        p: Optional[float] = 0.5,
+    ) -> None:
         super().__init__(always_apply, p)
         self.offset = offset
 
-    def apply(self, points, **params):
+    def apply(self, points: ndarray, **params: Any) -> ndarray:
         return F.move(F.center(points), self.offset)
 
-    def apply_to_normals(self, normals, **params):
+    def apply_to_normals(self, normals: ndarray, **params: Any) -> ndarray:
         return normals
 
-    def apply_to_features(self, features, **params):
+    def apply_to_features(self, features: ndarray, **params: Any) -> ndarray:
         return features
 
-    def apply_to_labels(self, labels, **params):
+    def apply_to_labels(self, labels: ndarray, **params: Any) -> ndarray:
         return labels
 
-    def get_transform_init_args(self):
+    def get_transform_init_args(self) -> Dict[str, Tuple[int, int, int]]:
         return {
             "offset": self.offset,
         }
@@ -234,26 +276,38 @@ class Move3d(PointCloudsTransform):
 
     """
 
-    def __init__(self, offset=(0, 0, 0), always_apply=False, p=1.0):
+    def __init__(
+        self,
+        offset: Optional[Union[List[int], Tuple[int, int, int]]] = (0, 0, 0),
+        always_apply: Optional[bool] = True,
+        p: Optional[float] = 0.5,
+    ) -> None:
         super().__init__(always_apply, p)
         self.offset = offset
 
-    def get_params(self):
+    def get_params(
+        self,
+    ) -> Union[Dict[str, List[int]], Dict[str, Tuple[int, int, int]]]:
         return {"offset": self.offset}
 
-    def apply(self, points, offset, **params):
+    def apply(
+        self,
+        points: ndarray,
+        offset: Union[List[float], List[int], Tuple[int, int, int]],
+        **params: Any,
+    ) -> ndarray:
         return F.move(points, offset)
 
-    def apply_to_normals(self, normals, **params):
+    def apply_to_normals(self, normals: ndarray, **params: Any) -> ndarray:
         return normals
 
-    def apply_to_features(self, features, **params):
+    def apply_to_features(self, features: ndarray, **params: Any) -> ndarray:
         return features
 
-    def apply_to_labels(self, labels, **params):
+    def apply_to_labels(self, labels: ndarray, **params: Any) -> ndarray:
         return labels
 
-    def get_transform_init_args(self):
+    def get_transform_init_args(self) -> Dict[str, Tuple[int, int, int]]:
         return {
             "offset": self.offset,
         }
@@ -281,16 +335,16 @@ class RandomMove3d(Move3d):
 
     def __init__(
         self,
-        x_min=-1.0,
-        y_min=-1.0,
-        z_min=-1.0,
-        x_max=1.0,
-        y_max=1.0,
-        z_max=1.0,
-        offset=(0, 0, 0),
-        always_apply=False,
-        p=0.5,
-    ):
+        x_min: Optional[float] = -1,
+        y_min: Optional[float] = -1,
+        z_min: Optional[float] = -1,
+        x_max: Optional[float] = 1,
+        y_max: Optional[float] = 1,
+        z_max: Optional[float] = 1,
+        offset: Tuple[int, int, int] = (0, 0, 0),
+        always_apply: Optional[float] = False,
+        p: Optional[float] = 1.0,
+    ) -> None:
         super().__init__(offset, always_apply, p)
         self.x_min = x_min
         self.y_min = y_min
@@ -299,7 +353,7 @@ class RandomMove3d(Move3d):
         self.y_max = y_max
         self.z_max = z_max
 
-    def get_params(self):
+    def get_params(self) -> Dict[str, List[float]]:
         offset = [
             random.uniform(self.x_min, self.x_max),
             random.uniform(self.y_min, self.y_max),
@@ -307,7 +361,9 @@ class RandomMove3d(Move3d):
         ]
         return {"offset": offset}
 
-    def get_transform_init_args_names(self):
+    def get_transform_init_args_names(
+        self,
+    ) -> Dict[str, Union[float, Tuple[int, int, int]]]:
         return {
             "offset": self.offset,
             "x_min": self.x_min,
@@ -334,15 +390,22 @@ class RandomDropout3d(PointCloudsTransform):
 
     """
 
-    def __init__(self, dropout_ratio=0.2, always_apply=False, p=0.5):
+    def __init__(
+        self,
+        dropout_ratio: Optional[float] = 0.2,
+        always_apply: Optional[bool] = False,
+        p: Optional[float] = 0.5,
+    ) -> None:
         super().__init__(always_apply, p)
         self.dropout_ratio = dropout_ratio
 
     @property
-    def targets_as_params(self):
+    def targets_as_params(self) -> List[str]:
         return ["points"]
 
-    def get_params_dependent_on_targets(self, params):
+    def get_params_dependent_on_targets(
+        self, params: Dict[str, ndarray]
+    ) -> Dict[str, List[int]]:
         points_len = len(params["points"])
         indexes = random.sample(
             range(points_len), k=int(points_len * (1 - self.dropout_ratio))
@@ -350,19 +413,25 @@ class RandomDropout3d(PointCloudsTransform):
         sorted_indexes = sorted(indexes)
         return {"indexes": sorted_indexes}
 
-    def apply(self, points, indexes, **params):
+    def apply(self, points: ndarray, indexes: List[int], **params: Any) -> ndarray:
         return points[indexes]
 
-    def apply_to_normals(self, normals, indexes, **params):
+    def apply_to_normals(
+        self, normals: ndarray, indexes: List[int], **params: Any
+    ) -> ndarray:
         return normals[indexes]
 
-    def apply_to_labels(self, labels, indexes, **params):
+    def apply_to_labels(
+        self, labels: ndarray, indexes: List[int], **params: Any
+    ) -> ndarray:
         return labels[indexes]
 
-    def apply_to_features(self, features, indexes, **params):
+    def apply_to_features(
+        self, features: ndarray, indexes: List[int], **params: Any
+    ) -> ndarray:
         return features[indexes]
 
-    def get_transform_init_args(self):
+    def get_transform_init_args(self) -> Dict[str, int]:
         return {"dropout_ratio": self.dropout_ratio}
 
 
@@ -382,21 +451,26 @@ class Flip3d(PointCloudsTransform):
 
     """
 
-    def __init__(self, axis=(0, 0, 1), always_apply=False, p=0.5):
+    def __init__(
+        self,
+        axis: Optional[Tuple[int, int, int]] = (0, 0, 1),
+        always_apply: Optional[bool] = False,
+        p: Optional[float] = 0.5,
+    ):
         super().__init__(always_apply, p)
         self.axis = axis
 
-    def apply(self, points, **params):
+    def apply(self, points: ndarray, **params: Any) -> ndarray:
         return F.rotate_around_axis(points, axis=self.axis, angle=math.pi)
 
-    def apply_to_normals(self, normals, **params):
+    def apply_to_normals(self, normals: ndarray, **params: Any) -> ndarray:
         return F.rotate_around_axis(normals, axis=self.axis, angle=math.pi)
 
-    def apply_to_features(self, features, **params):
+    def apply_to_features(self, features: ndarray, **params: Any) -> ndarray:
         return features
 
-    def apply_to_labels(self, labels, **params):
+    def apply_to_labels(self, labels: ndarray, **params: Any) -> ndarray:
         return labels
 
-    def get_transform_init_args(self):
+    def get_transform_init_args(self) -> Dict[str, Tuple[int, int, int]]:
         return {"axis": self.axis}

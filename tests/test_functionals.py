@@ -1,6 +1,7 @@
 import numpy as np
 import pytest
 import volumentations.augmentations.functional as F
+from numpy import ndarray
 
 
 @pytest.mark.parametrize(
@@ -46,6 +47,7 @@ def test_crop(points, expected_points, min_max):
 
 
 def test_crop_should_fail(points):
+    # type: (ndarray) -> None
     try:
         F.crop(
             points, x_min=10, x_max=0, y_min=0, y_max=10, z_min=0, z_max=10,

@@ -1,7 +1,6 @@
-from __future__ import absolute_import
-
 import json
 import warnings
+from typing import Any, Dict, Optional
 
 from volumentations import __version__
 
@@ -32,7 +31,9 @@ class SerializableMeta(type):
         return cls_obj
 
 
-def to_dict(transform, on_not_implemented_error="raise"):
+def to_dict(
+    transform: Any, on_not_implemented_error: Optional[Any] = "raise"
+) -> Dict[str, Any]:
     """
     Take a transform pipeline and convert it to a serializable representation
     that uses only standard python data types: dictionaries, lists, strings,
@@ -51,7 +52,7 @@ def to_dict(transform, on_not_implemented_error="raise"):
             "'raise' and 'warn'".format(on_not_implemented_error)
         )
     try:
-        transform_dict = transform._to_dict()  # skipcq: PYL-W0212
+        transform_dict = transform._to_dict()
     except NotImplementedError as e:
         if on_not_implemented_error == "raise":
             raise e
@@ -68,7 +69,9 @@ def to_dict(transform, on_not_implemented_error="raise"):
     return {"__version__": __version__, "transform": transform_dict}
 
 
-def instantiate_lambda(transform, lambda_transforms=None):
+def instantiate_lambda(
+    transform: Dict[str, Any], lambda_transforms: Optional[Any] = None
+) -> Optional[Any]:
     if transform.get("__type__") == "Lambda":
         name = transform["__name__"]
         if lambda_transforms is None:
@@ -88,7 +91,9 @@ def instantiate_lambda(transform, lambda_transforms=None):
     return None
 
 
-def from_dict(transform_dict, lambda_transforms=None):
+def from_dict(
+    transform_dict: Dict[str, Any], lambda_transforms: Optional[Any] = None
+) -> Any:
     """
     Args:
         transform (dict): A dictionary with serialized transform pipeline.
@@ -114,6 +119,7 @@ def from_dict(transform_dict, lambda_transforms=None):
 
 
 def check_data_format(data_format):
+    # type: (str) -> None
     if data_format not in {"json", "yaml"}:
         raise ValueError(
             "Unknown data_format {}. Supported formats are: 'json' and 'yaml'".format(
@@ -122,7 +128,12 @@ def check_data_format(data_format):
         )
 
 
-def save(transform, filepath, data_format="json", on_not_implemented_error="raise"):
+def save(
+    transform: Any,
+    filepath: str,
+    data_format: Optional[str] = "json",
+    on_not_implemented_error: Optional[str] = "raise",
+) -> None:
     """
     Take a transform pipeline, serialize it and save a serialized version to a file
     using either json or yaml format.
@@ -145,7 +156,11 @@ def save(transform, filepath, data_format="json", on_not_implemented_error="rais
         dump_fn(transform_dict, f)
 
 
-def load(filepath, data_format="json", lambda_transforms=None):
+def load(
+    filepath: str,
+    data_format: Optional[str] = "json",
+    lambda_transforms: Optional[str] = None,
+) -> Any:
     """
     Load a serialized pipeline from a json or yaml file and construct a transform pipeline.
 

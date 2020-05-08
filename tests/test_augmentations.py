@@ -1,5 +1,8 @@
+from typing import List
+
 import numpy as np
 import pytest
+from numpy import ndarray
 from volumentations import (
     Center3d,
     Crop3d,
@@ -37,8 +40,14 @@ def test_augmentations_wont_change_input(
 
 
 def test_augmentations_flip_wont_change_input(
-    points, features, labels, normals, bboxes, cameras
+    points,  # type: ndarray
+    features,  # type: ndarray
+    labels,  # type: ndarray
+    normals,  # type: ndarray
+    bboxes,  # type: List[ndarray]
+    cameras,  # type: List[ndarray]
 ):
+    # type: (...) -> None
     points_copy = points.copy()
     features_copy = features.copy()
     labels_copy = labels.copy()
@@ -61,7 +70,15 @@ def test_augmentations_flip_wont_change_input(
 @pytest.mark.parametrize(
     "points", [np.ones((100, 3)), np.zeros((100, 3)), np.full((100, 3), 42.0)]
 )
-def test_center(points, features, labels, normals, bboxes, cameras):
+def test_center(
+    points,  # type: ndarray
+    features,  # type: ndarray
+    labels,  # type: ndarray
+    normals,  # type: ndarray
+    bboxes,  # type: List[ndarray]
+    cameras,  # type: List[ndarray]
+):
+    # type: (...) -> None
     points_copy = np.zeros((100, 3))
     features_copy = features.copy()
     labels_copy = labels.copy()
