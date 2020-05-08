@@ -62,7 +62,7 @@ source = ["volumentations"]
 
 [tool.coverage.report]
 show_missing = true
-fail_under = 50
+fail_under = 90
 
 [tool.black]
 # https://github.com/psf/black
