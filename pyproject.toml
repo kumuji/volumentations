@@ -43,15 +43,14 @@ mypy = "^0.770"
 pre-commit = "^2.3.0"
 coverage = {extras = ["toml"], version = "^5.1"}
 pytest-cov = "^2.8.1"
-dephell = "^0.8.2"
 nox = "^2019.11.9"
 pytest-mock = "^3.1.0"
 safety = "^1.9.0"
-typeguard = "^2.7.1"
 darglint = "^1.2.3"
 xdoctest = "^0.12.0"
-sphinx = "^3.0.3"
+sphinx = "<3.0"
 sphinx-autodoc-typehints = "^1.10.3"
+sphinx_rtd_theme = "^0.4.3"
 
 [tool.coverage.paths]
 source = ["src", "*/site-packages"]
@@ -64,11 +63,6 @@ source = ["volumentations"]
 [tool.coverage.report]
 show_missing = true
 fail_under = 50
-
-[tool.dephell.main]
-# poetry run dephell deps convert
-from = {format = "poetry", path = "pyproject.toml"}
-to = {format = "setuppy", path = "dephel_setup.py"}
 
 [build-system]
 requires = ["poetry>=0.12"]
