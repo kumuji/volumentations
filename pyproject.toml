@@ -43,7 +43,7 @@ mypy = "^0.770"
 pre-commit = "^2.3.0"
 coverage = {extras = ["toml"], version = "^5.1"}
 pytest-cov = "^2.8.1"
-dephell = "^0.8.2"
+dephell = "^0.8.3"
 nox = "^2019.11.9"
 pytest-mock = "^3.1.0"
 safety = "^1.9.0"
