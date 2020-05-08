@@ -24,12 +24,12 @@ def __test_multiprocessing_support_proc(args):
 def test_multiprocessing_support(
     augmentation_cls, params, multiprocessing_context, points
 ):
-    """Checks whether we can use augmentations in multiprocessing environments"""
+    """Checks whether we can use augmentations in multiprocessing environments."""
     aug = augmentation_cls(p=1, **params)
 
     pool = multiprocessing_context.Pool(8)
     pool.map(
-        __test_multiprocessing_support_proc, map(lambda x: (x, aug), [points] * 100)
+        __test_multiprocessing_support_proc, map(lambda x: (x, aug), [points] * 100),
     )
     pool.close()
     pool.join()

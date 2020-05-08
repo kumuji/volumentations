@@ -1,10 +1,10 @@
 import random
 from unittest.mock import patch
 
-import pytest
 import numpy as np
-
+import pytest
 import volumentations as V
+
 from .utils import OpenMock
 
 TEST_SEEDS = (0, 1, 42, 111, 9999)
@@ -81,7 +81,7 @@ def test_augmentations_serialization_to_file_with_custom_parameters(
 ):
     with patch("builtins.open", OpenMock()):
         aug = augmentation_cls(p=p, always_apply=always_apply, **params)
-        filepath = "serialized.{}".format(data_format)
+        filepath = f"serialized.{data_format}"
         V.save(aug, filepath, data_format=data_format)
         deserialized_aug = V.load(filepath, data_format=data_format)
         set_seed(seed)

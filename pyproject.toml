@@ -64,6 +64,24 @@ source = ["volumentations"]
 show_missing = true
 fail_under = 50
 
+[tool.black]
+# https://github.com/psf/black
+line-length = 88
+target-version = ["py38"]
+exclude = "(.eggs|.git|.hg|.mypy_cache|.nox|.tox|.venv|.svn|_build|buck-out|build|dist)"
+
+[tool.isort]
+# https://github.com/timothycrosley/isort/
+known_typing = "typing,types,typing_extensions,mypy,mypy_extensions"
+known_third_party = "nox,numpy,pytest,volumentations"
+sections = "FUTURE,TYPING,STDLIB,THIRDPARTY,FIRSTPARTY,LOCALFOLDER"
+include_trailing_comma = true
+default_section = "FIRSTPARTY"
+multi_line_output = 3
+force_grid_wrap = 0
+use_parentheses = true
+line_length = 88
+
 [build-system]
-requires = ["poetry>=0.12"]
+requires = ["poetry>=1.0"]
 build-backend = "poetry.masonry.api"

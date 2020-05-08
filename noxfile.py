@@ -42,7 +42,7 @@ def black(session: Session) -> None:
     """Run black code formatter."""
     args = session.posargs or locations
     install_with_constraints(session, "black")
-    session.run("black", *args)
+    session.run("black", "--config", "./pyproject.toml", *args)
 
 
 @nox.session(python=["3.6", "3.7", "3.8"])

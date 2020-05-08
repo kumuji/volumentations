@@ -35,7 +35,7 @@ class Scale3d(PointCloudsTransform):
     """
 
     def __init__(
-        self, scale_limit=(0.1, 0.1, 0.1), bias=(1, 1, 1), always_apply=False, p=0.5
+        self, scale_limit=(0.1, 0.1, 0.1), bias=(1, 1, 1), always_apply=False, p=0.5,
     ):
         super().__init__(always_apply, p)
         self.scale_limit = []
@@ -69,7 +69,8 @@ class RotateAroundAxis3d(PointCloudsTransform):
 
     Args:
         rotation_limit (float): maximum rotation of the input point cloud. Default: (pi / 2).
-        axis (list(float, float, float)): axis around which the point cloud is rotated. Default: (0, 0, 1).
+        axis (list(float, float, float)): axis around which the point cloud is rotated.
+            Default: (0, 0, 1).
         p (float): probability of applying the transform. Default: 0.5.
 
     Targets:
@@ -81,7 +82,7 @@ class RotateAroundAxis3d(PointCloudsTransform):
     """
 
     def __init__(
-        self, rotation_limit=math.pi / 2, axis=(0, 0, 1), always_apply=False, p=0.5
+        self, rotation_limit=math.pi / 2, axis=(0, 0, 1), always_apply=False, p=0.5,
     ):
         super().__init__(always_apply, p)
         self.rotation_limit = to_tuple(rotation_limit, bias=0)
@@ -366,7 +367,7 @@ class RandomDropout3d(PointCloudsTransform):
 
 
 class Flip3d(PointCloudsTransform):
-    """Flip point cloud around axis
+    """Flip point cloud around axis.
         Implemented as rotation on 180 deg around axis.
 
     Args:

@@ -1,3 +1,6 @@
+default_language_version:
+  python: python3.8
+
 repos:
   - repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v2.3.0
@@ -5,24 +8,31 @@ repos:
       - id: trailing-whitespace
       - id: check-yaml
       - id: end-of-file-fixer
+
   - repo: local
     hooks:
       - id: black
         name: black
         entry: poetry run black
+        args: [--config, ./pyproject.toml]
         language: system
         types: [python]
+
       - id: flake8
         name: flake8
         entry: poetry run flake8
         language: system
         types: [python]
-  - repo: https://github.com/asottile/seed-isort-config
-    rev: v2.1.1
-    hooks:
-      - id: seed-isort-config
+
   - repo: https://github.com/timothycrosley/isort
-    rev: 4.3.19 # pick the isort version you'd like to use from https://github.com/timothycrosley/isort/releases
+    rev: 4.3.21-2
     hooks:
       - id: isort
-        files: \.py$
+        args: [--settings-path, ./pyproject.toml]
+        additional_dependencies: [tomlkit, toml]
+
+  - repo: https://github.com/asottile/pyupgrade
+    rev: v2.4.1
+    hooks:
+      - id: pyupgrade
+        args: [--py38-plus]

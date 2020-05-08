@@ -1,24 +1,18 @@
 from unittest import mock
-from unittest.mock import Mock, MagicMock, call
+from unittest.mock import MagicMock, Mock, call
 
 import numpy as np
 import pytest
-
-from volumentations.core.transforms_interface import to_tuple, PointCloudsTransform
-from volumentations.core.composition import (
-    OneOrOther,
-    Compose,
-    OneOf,
-    ReplayCompose,
-)
 from volumentations.augmentations.transforms import (
-    Scale3d,
-    RotateAroundAxis3d,
-    Move3d,
     Center3d,
-    RandomDropout3d,
     Flip3d,
+    Move3d,
+    RandomDropout3d,
+    RotateAroundAxis3d,
+    Scale3d,
 )
+from volumentations.core.composition import Compose, OneOf, OneOrOther, ReplayCompose
+from volumentations.core.transforms_interface import PointCloudsTransform, to_tuple
 
 
 def test_one_or_other():

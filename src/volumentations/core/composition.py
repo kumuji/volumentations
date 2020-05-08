@@ -132,7 +132,7 @@ class Compose(BaseCompose):
     def __init__(
         self, transforms, additional_targets=None, p=1.0,
     ):
-        super(Compose, self).__init__([t for t in transforms if t is not None], p)
+        super().__init__([t for t in transforms if t is not None], p)
 
         self.processors = {}
 
@@ -171,7 +171,7 @@ class Compose(BaseCompose):
         return data
 
     def _to_dict(self):
-        dictionary = super(Compose, self)._to_dict()
+        dictionary = super()._to_dict()
         dictionary.update({"additional_targets": self.additional_targets})
         return dictionary
 
@@ -185,7 +185,7 @@ class OneOf(BaseCompose):
     """
 
     def __init__(self, transforms, p=0.5):
-        super(OneOf, self).__init__(transforms, p)
+        super().__init__(transforms, p)
         transforms_ps = [t.p for t in transforms]
         s = sum(transforms_ps)
         self.transforms_ps = [t / s for t in transforms_ps]
@@ -207,7 +207,7 @@ class OneOrOther(BaseCompose):
     def __init__(self, first=None, second=None, transforms=None, p=0.5):
         if transforms is None:
             transforms = [first, second]
-        super(OneOrOther, self).__init__(transforms, p)
+        super().__init__(transforms, p)
 
     def __call__(self, force_apply=False, **data):
         if self.replay_mode:
@@ -225,13 +225,13 @@ class ReplayCompose(Compose):
     def __init__(
         self, transforms, additional_targets=None, p=1.0, save_key="replay",
     ):
-        super(ReplayCompose, self).__init__(transforms, additional_targets, p)
+        super().__init__(transforms, additional_targets, p)
         self.set_deterministic(True, save_key=save_key)
         self.save_key = save_key
 
     def __call__(self, force_apply=False, **kwargs):
         kwargs[self.save_key] = defaultdict(dict)
-        result = super(ReplayCompose, self).__call__(force_apply=force_apply, **kwargs)
+        result = super().__call__(force_apply=force_apply, **kwargs)
         serialized = self.get_dict_with_id()
         self.fill_with_params(serialized, result[self.save_key])
         self.fill_applied(serialized)
