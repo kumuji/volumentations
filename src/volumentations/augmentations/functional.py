@@ -14,6 +14,7 @@ def rotate_around_axis(points, axis, angle):
     the given axis by angle in radians.
     https://stackoverflow.com/questions/6802577/rotation-of-3d-vector
     """
+    center_point = points[:, :3].mean(axis=0).astype(points[:, :3].dtype)
     axis = axis / np.sqrt(np.dot(axis, axis))
     a = np.cos(angle / 2.0)
     b, c, d = -axis * np.sin(angle / 2.0)
@@ -26,7 +27,9 @@ def rotate_around_axis(points, axis, angle):
             [2 * (bd + ac), 2 * (cd - ab), aa + dd - bb - cc],
         ]
     )
+    points[:, :3] = points[:, :3] - center_point
     points[:, :3] = np.dot(points[:, :3], rotation_matrix.T)
+    points[:, :3] = points[:, :3] + center_point
     return points
 
 
