@@ -173,7 +173,7 @@ description = "A utility for ensuring Google-style docstrings stay up to date wi
 name = "darglint"
 optional = false
 python-versions = ">=3.5,<4.0"
-version = "1.4.0"
+version = "1.5.1"
 
 [[package]]
 category = "dev"
@@ -1027,7 +1027,7 @@ docs = ["sphinx", "jaraco.packaging (>=3.2)", "rst.linker (>=1.9)"]
 testing = ["jaraco.itertools", "func-timeout"]
 
 [metadata]
-content-hash = "838bfb3b690e9cd4130099f76f6b760cf4867941d535624a49184db12e0a57e2"
+content-hash = "88edd2257b34cfaf8a385ea2b856992b2b645abb080777218628aae721f285c9"
 python-versions = "^3.6.1"
 
 [metadata.files]
@@ -1121,8 +1121,8 @@ coverage = [
     {file = "coverage-5.1.tar.gz", hash = "sha256:f90bfc4ad18450c80b024036eaf91e4a246ae287701aaa88eaebebf150868052"},
 ]
 darglint = [
-    {file = "darglint-1.4.0-py3-none-any.whl", hash = "sha256:be8f4e722dd7c49d6b2abe1f23a2302e9b952fb88faab30fd030b7e79797901e"},
-    {file = "darglint-1.4.0.tar.gz", hash = "sha256:ffcd02e23be54ef3eec47039a0da4290da4e78902ebd315f4bfb83d59c093437"},
+    {file = "darglint-1.5.1-py3-none-any.whl", hash = "sha256:b37be3bea80d25fa015c002ab63d4100a676441dbb75af7cd1df69b1b9324d5f"},
+    {file = "darglint-1.5.1.tar.gz", hash = "sha256:cb845b4cd046c9073be1f24935b6609abdc521270669ed7370ca0cdb112a7e1c"},
 ]
 distlib = [
     {file = "distlib-0.3.0.zip", hash = "sha256:2e166e231a26b36d6dfe35a48c4464346620f8645ed0ace01ee31822b288de21"},
