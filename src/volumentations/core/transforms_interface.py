@@ -253,7 +253,7 @@ class PointCloudsTransform(BasicTransform):
         )
 
 
-class NoOp(BasicTransform):
+class NoOp(PointCloudsTransform):
     """Does nothing"""
 
     def apply(self, points, **params):
