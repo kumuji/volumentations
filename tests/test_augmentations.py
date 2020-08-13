@@ -8,6 +8,7 @@ from volumentations import (
     RandomDropout3d,
     RotateAroundAxis3d,
     Scale3d,
+    NoOp,
 )
 
 
@@ -19,6 +20,7 @@ from volumentations import (
         [Move3d, {}],
         [RandomDropout3d, {"dropout_ratio": 0.0}],
         [Crop3d, {}],
+        [NoOp, {}]
     ],
 )
 def test_augmentations_wont_change_input(
