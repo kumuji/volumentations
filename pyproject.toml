@@ -44,7 +44,7 @@ pre-commit = "^2.6.0"
 coverage = {extras = ["toml"], version = "^5.2"}
 pytest-cov = "^2.10.0"
 nox = "^2020.5.24"
-pytest-mock = "^3.1.1"
+pytest-mock = "^3.3.1"
 safety = "^1.9.0"
 darglint = "^1.5.1"
 xdoctest = "^0.12.0"
