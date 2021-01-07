@@ -20,7 +20,7 @@ from volumentations import (
         [Move3d, {}],
         [RandomDropout3d, {"dropout_ratio": 0.0}],
         [Crop3d, {}],
-        [NoOp, {}]
+        [NoOp, {}],
     ],
 )
 def test_augmentations_wont_change_input(
@@ -32,28 +32,6 @@ def test_augmentations_wont_change_input(
     normals_copy = normals.copy()
     aug = augmentation_cls(p=1, **params)
     data = aug(points=points, features=features, labels=labels, normals=normals,)
-    np.testing.assert_allclose(data["points"], points_copy)
-    np.testing.assert_allclose(data["features"], features_copy)
-    np.testing.assert_allclose(data["labels"], labels_copy)
-    np.testing.assert_allclose(data["normals"], normals_copy)
-
-
-def test_augmentations_flip_wont_change_input(
-    points, features, labels, normals, bboxes, cameras
-):
-    points_copy = points.copy()
-    features_copy = features.copy()
-    labels_copy = labels.copy()
-    normals_copy = normals.copy()
-    data = Flip3d(p=1)(
-        points=points, features=features, labels=labels, normals=normals,
-    )
-    data = Flip3d(p=1)(
-        points=data["points"],
-        features=data["features"],
-        labels=data["labels"],
-        normals=data["normals"],
-    )
     np.testing.assert_allclose(data["points"], points_copy)
     np.testing.assert_allclose(data["features"], features_copy)
     np.testing.assert_allclose(data["labels"], labels_copy)
