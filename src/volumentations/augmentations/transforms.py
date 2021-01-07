@@ -70,6 +70,7 @@ class RotateAroundAxis3d(PointCloudsTransform):
     Args:
         rotation_limit (float): maximum rotation of the input point cloud. Default: (pi / 2).
         axis (list(float, float, float)): axis around which the point cloud is rotated. Default: (0, 0, 1).
+        center_point (float, float, float): point around which to rotate. Default: mean points.
         p (float): probability of applying the transform. Default: 0.5.
 
     Targets:
@@ -81,21 +82,27 @@ class RotateAroundAxis3d(PointCloudsTransform):
     """
 
     def __init__(
-        self, rotation_limit=math.pi / 2, axis=(0, 0, 1), always_apply=False, p=0.5
+        self,
+        rotation_limit=math.pi / 2,
+        axis=(0, 0, 1),
+        center_point=None,
+        always_apply=False,
+        p=0.5,
     ):
         super().__init__(always_apply, p)
         self.rotation_limit = to_tuple(rotation_limit, bias=0)
         self.axis = axis
+        self.center_point = center_point
 
     def get_params(self):
         angle = random.uniform(self.rotation_limit[0], self.rotation_limit[1])
-        return {"angle": angle, "axis": self.axis}
+        return {"angle": angle, "axis": self.axis, "center_point": self.center_point}
 
     def apply(self, points, axis, angle, **params):
-        return F.rotate_around_axis(points, axis, angle)
+        return F.rotate_around_axis(points, axis, angle, center_point=self.center_point)
 
     def apply_to_normals(self, normals, axis, angle, **params):
-        return F.rotate_around_axis(normals, axis, angle)
+        return F.rotate_around_axis(normals, axis, angle, center_point=(0, 0, 0))
 
     def apply_to_features(self, features, **params):
         return features
@@ -381,15 +388,17 @@ class Flip3d(PointCloudsTransform):
 
     """
 
-    def __init__(self, axis=(0, 0, 1), always_apply=False, p=0.5):
+    def __init__(self, axis=(1, 0, 0), always_apply=False, p=0.5):
         super().__init__(always_apply, p)
         self.axis = axis
 
     def apply(self, points, **params):
-        return F.rotate_around_axis(points, axis=self.axis, angle=math.pi)
+        points = F.flip_coordinates(points, self.axis)
+        return points
 
     def apply_to_normals(self, normals, **params):
-        return F.rotate_around_axis(normals, axis=self.axis, angle=math.pi)
+        normals[:, self.axis] = -normals[:, self.axis]
+        return normals
 
     def apply_to_features(self, features, **params):
         return features
