@@ -48,7 +48,13 @@ def test_crop(points, expected_points, min_max):
 def test_crop_should_fail(points):
     try:
         F.crop(
-            points, x_min=10, x_max=0, y_min=0, y_max=10, z_min=0, z_max=10,
+            points,
+            x_min=10,
+            x_max=0,
+            y_min=0,
+            y_max=10,
+            z_min=0,
+            z_max=10,
         )
         assert False, "Crop input limits check didn't work"
     except ValueError:
@@ -96,4 +102,19 @@ def test_move(points, expected_points, offset):
 )
 def test_scale(points, expected_points, scale_factor):
     processed_points = F.scale(points, scale_factor)
+    assert np.allclose(expected_points, processed_points)
+
+
+@pytest.mark.parametrize(
+    ["points", "expected_points", "axis"],
+    [
+        (
+            np.array([[1, 1, 1], [0, 0, 0]], dtype=np.float),
+            np.array([[0, 1, 1], [1, 0, 0]], dtype=np.float),
+            np.array([1, 0, 0]),
+        )
+    ],
+)
+def test_flip(points, expected_points, axis):
+    processed_points = F.flip_coordinates(points, axis)
     assert np.allclose(expected_points, processed_points)

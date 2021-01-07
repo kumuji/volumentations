@@ -73,6 +73,7 @@ def move(points, offset=(0, 0, 0)):
 
 
 def flip_coordinates(points, axis):
+    axis = np.argmax(axis)
     coord_max = np.max(points[:, axis])
     points[:, axis] = coord_max - points[:, axis]
     return points
