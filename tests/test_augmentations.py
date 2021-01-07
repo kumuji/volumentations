@@ -3,12 +3,11 @@ import pytest
 from volumentations import (
     Center3d,
     Crop3d,
-    Flip3d,
     Move3d,
+    NoOp,
     RandomDropout3d,
     RotateAroundAxis3d,
     Scale3d,
-    NoOp,
 )
 
 
@@ -31,7 +30,12 @@ def test_augmentations_wont_change_input(
     labels_copy = labels.copy()
     normals_copy = normals.copy()
     aug = augmentation_cls(p=1, **params)
-    data = aug(points=points, features=features, labels=labels, normals=normals,)
+    data = aug(
+        points=points,
+        features=features,
+        labels=labels,
+        normals=normals,
+    )
     np.testing.assert_allclose(data["points"], points_copy)
     np.testing.assert_allclose(data["features"], features_copy)
     np.testing.assert_allclose(data["labels"], labels_copy)
@@ -47,7 +51,12 @@ def test_center(points, features, labels, normals, bboxes, cameras):
     labels_copy = labels.copy()
     normals_copy = normals.copy()
     aug = Center3d(p=1)
-    data = aug(points=points, features=features, labels=labels, normals=normals,)
+    data = aug(
+        points=points,
+        features=features,
+        labels=labels,
+        normals=normals,
+    )
     np.testing.assert_allclose(data["points"], points_copy)
     np.testing.assert_allclose(data["features"], features_copy)
     np.testing.assert_allclose(data["labels"], labels_copy)
