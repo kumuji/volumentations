@@ -29,7 +29,7 @@ classifiers=[
 python = "^3.6.1"
 pyyaml = "^5.3.1"
 numpy = "^1.18.3"
-importlib-metadata = ">=1.6,<4.0"
+importlib-metadata = ">=1.6,<5.0"
 
 [tool.poetry.dev-dependencies]
 pytest = "^6.2.2"
