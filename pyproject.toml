@@ -43,7 +43,7 @@ mypy = "^0.812"
 pre-commit = "^2.12.1"
 coverage = {extras = ["toml"], version = "^5.5"}
 pytest-cov = "^2.12.0"
-nox = "^2020.5.24"
+nox = "^2021.6.6"
 pytest-mock = "^3.6.0"
 safety = "^1.10.3"
 darglint = "^1.7.0"
