@@ -32,7 +32,7 @@ numpy = "^1.18.3"
 importlib-metadata = ">=1.6,<5.0"
 
 [tool.poetry.dev-dependencies]
-pytest = "^6.2.2"
+pytest = "^7.0.1"
 flake8 = "^3.9.1"
 flake8-docstrings = "^1.6.0"
 flake8-isort = "^3.0.0"
