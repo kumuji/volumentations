@@ -6,32 +6,3 @@ updates:
     interval: daily
     time: "04:00"
   open-pull-requests-limit: 10
-  ignore:
-  - dependency-name: importlib-metadata
-    versions:
-    - 3.7.2
-    - 4.0.0
-  - dependency-name: sphinx-autodoc-typehints
-    versions:
-    - 1.12.0
-  - dependency-name: pre-commit
-    versions:
-    - 2.11.0
-    - 2.11.1
-    - 2.12.0
-  - dependency-name: sphinx-rtd-theme
-    versions:
-    - 0.5.2
-  - dependency-name: pytest
-    versions:
-    - 6.2.3
-  - dependency-name: darglint
-    versions:
-    - 1.8.0
-  - dependency-name: flake8-bugbear
-    versions:
-    - 21.3.2
-    - 21.4.3
-  - dependency-name: sphinx
-    versions:
-    - 3.5.2
