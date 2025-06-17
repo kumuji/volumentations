@@ -16,7 +16,7 @@ jobs:
           architecture: x64
 
       # Install uv (latest version recommended unless you need 0.5.4 specifically)
-      - run: pip install uv
+      - run: pip install uv toml
 
       # Increment version and add dev suffix
       - name: Update version
