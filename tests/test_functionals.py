@@ -65,8 +65,8 @@ def test_crop_should_fail(points):
     ["points", "expected_points"],
     [
         (
-            np.array([[2, 2, 2], [0, 0, 0]], dtype=np.float),
-            np.array([[1, 1, 1], [-1, -1, -1]], dtype=np.float),
+            np.array([[2, 2, 2], [0, 0, 0]], dtype=float),
+            np.array([[1, 1, 1], [-1, -1, -1]], dtype=float),
         )
     ],
 )
@@ -79,8 +79,8 @@ def test_center(points, expected_points):
     ["points", "expected_points", "offset"],
     [
         (
-            np.array([[2, 2, 2], [0, 0, 0]], dtype=np.float),
-            np.array([[102, 142, 52], [100, 140, 50]], dtype=np.float),
+            np.array([[2, 2, 2], [0, 0, 0]], dtype=float),
+            np.array([[102, 142, 52], [100, 140, 50]], dtype=float),
             np.array([100, 140, 50]),
         )
     ],
@@ -94,9 +94,9 @@ def test_move(points, expected_points, offset):
     ["points", "expected_points", "scale_factor"],
     [
         (
-            np.array([[2, 1, 1], [0, 0, 0]], dtype=np.float),
-            np.array([[4, 1, 1], [0, 0, 0]], dtype=np.float),
-            np.array([2, 1, 1], dtype=np.float),
+            np.array([[2, 1, 1], [0, 0, 0]], dtype=float),
+            np.array([[4, 1, 1], [0, 0, 0]], dtype=float),
+            np.array([2, 1, 1], dtype=float),
         )
     ],
 )
@@ -109,8 +109,8 @@ def test_scale(points, expected_points, scale_factor):
     ["points", "expected_points", "axis"],
     [
         (
-            np.array([[1, 1, 1], [0, 0, 0]], dtype=np.float),
-            np.array([[0, 1, 1], [1, 0, 0]], dtype=np.float),
+            np.array([[1, 1, 1], [0, 0, 0]], dtype=float),
+            np.array([[0, 1, 1], [1, 0, 0]], dtype=float),
             np.array([1, 0, 0]),
         )
     ],

@@ -164,3 +164,4 @@ fabric.properties
 docs/_build/
 src/*.egg-info/
 poetry.lock
+.DS_Store

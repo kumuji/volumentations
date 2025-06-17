@@ -1,25 +1,40 @@
-name: TestPyPI
+name: Publish to TestPyPI
 on:
   push:
     branches:
       - master
+
 jobs:
-  test_pypi:
+  publish:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v2
-    - uses: actions/setup-python@v1
-      with:
-        python-version: '3.8'
-        architecture: x64
-    - run: pip install poetry==1.0.5
-    - run: >-
-        poetry version patch &&
-        version=$(poetry version | awk '{print $2}') &&
-        poetry version $version.dev.$(date +%s)
-    - run: poetry build
-    - uses: pypa/gh-action-pypi-publish@v1.0.0a0
-      with:
-        user: __token__
-        password: ${{ secrets.TEST_PYPI_TOKEN }}
-        repository_url: https://test.pypi.org/legacy/
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          architecture: x64
+
+      # Install uv (latest version recommended unless you need 0.5.4 specifically)
+      - run: pip install uv
+
+      # Increment version and add dev suffix
+      - name: Update version
+        run: |
+          current_version=$(python -c "import toml; print(toml.load('pyproject.toml')['project']['version'])")
+          new_version="${current_version%.*}.$((${current_version##*.}+1))"
+          timestamp=$(date +%s)
+          dev_version="${new_version}.dev${timestamp}"
+
+          # Update pyproject.toml
+          python -c "import toml; data = toml.load('pyproject.toml'); data['project.version'] = '$dev_version'; toml.dump(data, open('pyproject.toml', 'w'))"
+          echo "Updated version to $dev_version"
+
+      # Build package
+      - run: uv build --sdist --wheel
+
+      # Publish to TestPyPI
+      - run: |
+          uv publish \
+            --publish-url https://test.pypi.org/legacy/ \
+            --token ${{ secrets.TEST_PYPI_TOKEN }}

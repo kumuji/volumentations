@@ -9,20 +9,16 @@ repos:
     hooks:
       - id: black
         name: black
-        entry: poetry run black
+        entry: black
         language: system
         types: [python]
       - id: flake8
         name: flake8
-        entry: poetry run flake8
+        entry: flake8
         language: system
         types: [python]
-  - repo: https://github.com/asottile/seed-isort-config
-    rev: v2.1.1
-    hooks:
-      - id: seed-isort-config
   - repo: https://github.com/timothycrosley/isort
-    rev: 4.3.19 # pick the isort version you'd like to use from https://github.com/timothycrosley/isort/releases
+    rev: 5.12.0
     hooks:
       - id: isort
         files: \.py$

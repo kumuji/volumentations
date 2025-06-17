@@ -1,10 +1,10 @@
+import multiprocessing
 import sys
 import warnings
-import multiprocessing
+from pathlib import Path
 
 import numpy as np
 import pytest
-
 
 try:
     import torch  # skipcq: PYL-W0611
@@ -15,8 +15,8 @@ except ImportError:
     torch_available = False
 
 
-def pytest_ignore_collect(path):
-    if not torch_available and path.fnmatch("test_pytorch.py"):
+def pytest_ignore_collect(collection_path: Path):
+    if not torch_available and collection_path.match("test_pytorch.py"):
         warnings.warn(
             UserWarning(
                 "Tests that require PyTorch and torchvision were skipped because those libraries are not installed."

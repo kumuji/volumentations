@@ -1,4 +1,5 @@
 """Utils used by volumentations."""
+
 from abc import ABCMeta, abstractmethod
 
 from ..core.six import add_metaclass, string_types

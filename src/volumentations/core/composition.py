@@ -130,7 +130,10 @@ class Compose(BaseCompose):
     """
 
     def __init__(
-        self, transforms, additional_targets=None, p=1.0,
+        self,
+        transforms,
+        additional_targets=None,
+        p=1.0,
     ):
         super(Compose, self).__init__([t for t in transforms if t is not None], p)
 
@@ -197,7 +200,7 @@ class OneOf(BaseCompose):
             return data
 
         if self.transforms_ps and (force_apply or random.random() < self.p):
-            random_state = np.random.RandomState(random.randint(0, 2 ** 32 - 1))
+            random_state = np.random.RandomState(random.randint(0, 2**32 - 1))
             t = random_state.choice(self.transforms.transforms, p=self.transforms_ps)
             data = t(force_apply=True, **data)
         return data
@@ -223,7 +226,11 @@ class OneOrOther(BaseCompose):
 
 class ReplayCompose(Compose):
     def __init__(
-        self, transforms, additional_targets=None, p=1.0, save_key="replay",
+        self,
+        transforms,
+        additional_targets=None,
+        p=1.0,
+        save_key="replay",
     ):
         super(ReplayCompose, self).__init__(transforms, additional_targets, p)
         self.set_deterministic(True, save_key=save_key)
