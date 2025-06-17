@@ -15,4 +15,6 @@ jobs:
         architecture: x64
     - run: pip install nox>=2025.5.1
     - run: pip install uv>=0.5.4
-    - run: nox
+    - run: nox --python 3.9
+    - run: nox --python 3.11
+    - run: nox --python 3.13
