@@ -7,12 +7,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - uses: actions/setup-python@v1
+      - uses: actions/setup-python@v5
         with:
           python-version: "3.11"
           architecture: x64
       - run: pip install uv==0.5.4
       - run: pip install nox==2025.5.1
-      - run: nox
+      - run: nox --python 3.11
       - run: uv build --sdist --wheel
       - run: uv publish --username=__token__ --password=${{ secrets.PYPI_TOKEN }}
