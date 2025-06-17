@@ -5,7 +5,6 @@
 [![Code Style: Black](https://img.shields.io/badge/code%20style-black-black.svg)](https://github.com/ambv/black)
 [![Downloads](https://pepy.tech/badge/volumentations)](https://pepy.tech/project/volumentations)
 [![CodeFactor](https://www.codefactor.io/repository/github/kumuji/volumentations/badge)](https://www.codefactor.io/repository/github/kumuji/volumentations)
-[![Maintainability](https://api.codeclimate.com/v1/badges/a3dc1e079290f508bf6f/maintainability)](https://codeclimate.com/github/kumuji/volumentations/maintainability)
 
 
 # ![logo](./docs/logo.png "logo") Volumentations
