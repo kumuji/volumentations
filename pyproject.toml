@@ -30,6 +30,7 @@ classifiers = [
 dependencies = [
     "numpy>=1.22.0",
     "pyyaml",
+    "scipy"
 ]
 
 [project.optional-dependencies]

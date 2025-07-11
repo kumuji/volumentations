@@ -13,6 +13,8 @@ __all__ = [
     "Center3d",
     "RandomDropout3d",
     "Flip3d",
+    "Noise3d",
+    "ElasticDistortion3d",
 ]
 
 
@@ -408,3 +410,94 @@ class Flip3d(PointCloudsTransform):
 
     def get_transform_init_args(self):
         return {"axis": self.axis}
+
+
+class Noise3d(PointCloudsTransform):
+    """Randomly add noise to point cloud.
+
+    Args:
+        noise_level (float): Standard deviation of the Gaussian noise as divider of the bounding box diagonal. Default: 1000.
+        p (float): probability of applying the transform. Default: 0.5.
+
+    Targets:
+        points
+        normals
+        features
+        labels
+
+    """
+
+    def __init__(self, noise_level=0.01, always_apply=False, p=0.5):
+        super().__init__(always_apply, p)
+        self.noise_level = noise_level
+
+    @property
+    def targets_as_params(self):
+        return ["points"]
+
+    def get_params_dependent_on_targets(self, params):
+        return {"noise_level": self.noise_level}
+
+    def apply(self, points, noise_level, **params):
+        return points + F.noise(points, noise_level=noise_level)
+
+    def apply_to_normals(self, normals, **params):
+        return normals
+
+    def apply_to_labels(self, labels, **params):
+        return labels
+
+    def apply_to_features(self, features, **params):
+        return features
+
+    def get_transform_init_args(self):
+        return {"noise_level": self.noise_level}
+
+
+class ElasticDistortion3d(PointCloudsTransform):
+    """Randomly add noise to point cloud.
+
+    Args:
+        granularity (float): Size of the noise grid (in same scale[m/cm] as the points). Default: 0.1.
+        magnitude (float): Magnitude of the noise. Default: 1.0.
+        p (float): probability of applying the transform. Default: 0.5.
+
+    Targets:
+        points
+        normals
+        features
+        labels
+
+    """
+
+    def __init__(self, granularity=0.1, magnitude=1.0, always_apply=False, p=0.5):
+        super().__init__(always_apply, p)
+        self.granularity = granularity
+        self.magnitude = magnitude
+
+    @property
+    def targets_as_params(self):
+        return ["points"]
+
+    def get_params_dependent_on_targets(self, params):
+        return {"granularity": self.granularity, "magnitude": self.magnitude}
+
+    def apply(self, points, granularity, magnitude, **params):
+        return points + F.elastic_distortion(
+            points, granularity=granularity, magnitude=magnitude
+        )
+
+    def apply_to_normals(self, normals, **params):
+        return normals
+
+    def apply_to_labels(self, labels, **params):
+        return labels
+
+    def apply_to_features(self, features, **params):
+        return features
+
+    def get_transform_init_args(self):
+        return {
+            "granularity": self.granularity,
+            "magnitude": self.magnitude,
+        }
