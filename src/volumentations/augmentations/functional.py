@@ -77,3 +77,10 @@ def flip_coordinates(points, axis):
     coord_max = np.max(points[:, axis])
     points[:, axis] = coord_max - points[:, axis]
     return points
+
+
+def noise(points, noise_level=1000):
+    bounding_box_diagonal = np.linalg.norm(
+        np.max(points[:, :3], axis=0) - np.min(points[:, :3], axis=0)
+    )
+    return np.random.normal(0, bounding_box_diagonal / noise_level, points.shape)
