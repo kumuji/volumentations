@@ -1,4 +1,5 @@
 import numpy as np
+import scipy
 
 
 def scale(points, scale_factor=(1, 1, 1)):
@@ -84,3 +85,39 @@ def noise(points, noise_level=1000):
         np.max(points[:, :3], axis=0) - np.min(points[:, :3], axis=0)
     )
     return np.random.normal(0, bounding_box_diagonal / noise_level, points.shape)
+
+
+def elastic_distortion(points, granularity=0.1, magnitude=1.0):
+    # from https://github.com/chrischoy/SpatioTemporalSegmentation/blob/4afee296ebe387d9a06fc1b168c4af212a2b4804/lib/transforms.py#L179
+
+    # Create Gaussian blur kernels for each axis
+    blurx = np.ones((3, 1, 1, 1)).astype("float32") / 3
+    blury = np.ones((1, 3, 1, 1)).astype("float32") / 3
+    blurz = np.ones((1, 1, 3, 1)).astype("float32") / 3
+
+    # Get spatial extents of the points
+    points_min = points.min(axis=0)
+    points_max = points.max(axis=0)
+    spatial_xyz = points_max - points_min
+
+    # Create Gaussian noise tensor of the size given by granularity
+    # - at least 3 for each dimension
+    steps_xyz = (spatial_xyz // granularity).astype(int) + 3
+    noise = np.random.randn(*steps_xyz, 3).astype(np.float32)
+
+    # Smoothing
+    for _ in range(2):
+        noise = scipy.ndimage.convolve(noise, blurx, mode="constant", cval=0)
+        noise = scipy.ndimage.convolve(noise, blury, mode="constant", cval=0)
+        noise = scipy.ndimage.convolve(noise, blurz, mode="constant", cval=0)
+
+    # Trilinear interpolate for each spatial dimension
+    grid = [
+        np.linspace(d_min, d_max, d)
+        for d_min, d_max, d in zip(points_min, points_max, steps_xyz)
+    ]
+    interpolation = scipy.interpolate.RegularGridInterpolator(
+        grid, noise, bounds_error=False, fill_value=None
+    )
+
+    return interpolation(points) * magnitude
